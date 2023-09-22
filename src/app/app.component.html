@@ -1,7 +1,6 @@
 <h1>Mi Aplicación Angular {{title}} con Keycloak</h1>
-
-		<button *ngIf="isLogueado" type="button" (click)="cerrarSesion()">Cerrar Session</button>
-		<button *ngIf="!isLogueado" type="button" (click)="iniciarSesion()">Iniciar Session</button>
+<button *ngIf="isLogueado" type="button" (click)="cerrarSesion()">Cerrar Session</button>
+<button *ngIf="!isLogueado" type="button" (click)="iniciarSesion()">Iniciar Session</button>
 <ng-container *ngIf="role">
 <h2>TIENE EL ROLL DE APP !!</h2>
 </ng-container>
