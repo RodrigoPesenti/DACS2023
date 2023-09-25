@@ -1,6 +1,37 @@
-<h1>Mi Aplicación Angular {{title}} con Keycloak</h1>
-<button *ngIf="isLogueado" type="button" (click)="cerrarSesion()">Cerrar Session</button>
-<button *ngIf="!isLogueado" type="button" (click)="iniciarSesion()">Iniciar Session</button>
+<nav class="navbar bg-dark navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+	<div class="container-fluid">
+	  <a class="navbar-brand" href="#">{{title}}</a>
+	  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		  <li class="nav-item">
+			<a class="nav-link active" aria-current="page" href="#">Inicio</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="#">Actividades</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="#">Mapa</a>
+		</ul>	
+	  </div>
+	</div>
+	<div class="container-fluid">
+		<button *ngIf="!isLogueado" type="button" class="btn btn-secondary ms-auto" (click)="iniciarSesion()">Iniciar Session</button>
+		<ul *ngIf="isLogueado" class="navbar-nav ms-auto mb-2 mb-lg-0">
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" *ngIf="perfilUsuario" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					{{ perfilUsuario.username }}
+				</a>
+				<ul class="dropdown-menu dropdown-menu-end">
+				<li><a class="dropdown-item" href="#">Preferencias</a></li>
+				<li><a class="dropdown-item" *ngIf="isLogueado" (click)="cerrarSesion()">Cerrar Sesion</a></li>
+				</ul>
+			</li>
+		</ul>	
+	</div>
+</nav>	
 <ng-container *ngIf="role">
 <h2>TIENE EL ROLL DE APP !!</h2>
 </ng-container>
@@ -28,14 +59,17 @@
 		      <td>{{ perfilUsuario.emailVerified ? 'Si' : 'No' }}</td>
 		    </tr>
 		  </table>
-		
+		</ng-container>
+
+<div class="fixed-bottom">
+	<ng-container *ngIf="testResponse">
+		<h2>Informacion version</h2>
+		<table>
+		  <tr *ngIf="testResponse.version">
+			<th scope="row">Version</th>
+			<td>{{ testResponse.version }}</td>
+		  </tr>
+		</table>
 	</ng-container>
-		<ng-container *ngIf="testResponse">
-			<h2>Informacion version</h2>
-			<table>
-			  <tr *ngIf="testResponse.version">
-				<th scope="row">Version</th>
-				<td>{{ testResponse.version }}</td>
-			  </tr>
-			</table>
-		  </ng-container>
+</div>
+	
