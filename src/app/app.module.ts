@@ -7,9 +7,13 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializeKeycloak } from './core/init/keycloak-init.factory';
 import { ApiService } from './core/services/apiservice.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ActividadesComponent } from './actividades/actividades.component';
+import { MapaComponent } from './mapa/mapa.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ActividadesComponent,
+    MapaComponent
   ],
   imports: [
     BrowserModule,
