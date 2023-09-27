@@ -9,11 +9,13 @@ import { ApiService } from './core/services/apiservice.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ActividadesComponent } from './actividades/actividades.component';
 import { MapaComponent } from './mapa/mapa.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 @NgModule({
   declarations: [
     AppComponent,
     ActividadesComponent,
-    MapaComponent
+    MapaComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,

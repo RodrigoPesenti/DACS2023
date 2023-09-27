@@ -1,66 +1,18 @@
-<div class="d-flex flex-col w-100">
-	<nav id="navbar" class="navbar fixed-top bg-dark navbar-expand-lg bg-body-tertiary rounded-pill p-1 m-2" data-bs-theme="dark">
-		<div class="container-fluid">
-		  <a class="navbar-brand" href="#">{{title}}</a>
-		  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		  </button>
-		  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-			  <li class="nav-item">
-				<a class="nav-link active" aria-current="page" href="#">Inicio</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link" href="#actividades">Actividades</a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link" href="#mapa">Mapa</a>
-			</ul>	
-		  </div>
-		</div>
-		
-		<div class="container-fluid">
-				<button *ngIf="!isLogueado" type="button" class="btn btn-secondary ms-auto" (click)="iniciarSesion()">Iniciar Session</button>
-				<ul *ngIf="isLogueado" class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" *ngIf="perfilUsuario" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							{{ perfilUsuario.username }}
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end">
-						<li><a class="dropdown-item" href="#">Preferencias</a></li>
-						<li><a class="dropdown-item" *ngIf="isLogueado" (click)="cerrarSesion()">Cerrar Sesion</a></li>
-						</ul>
-					</li>
-				</ul>	
-		</div>
-	</nav>	
+<div class="d-flex flex-col">
 	
+
 	<div class="fixed-bottom">
 	<ng-container *ngIf="testResponse">
-		<h2 class="fs-6">Informacion version</h2>
+		<h2 class="fs-6 text-white">Informacion version</h2>
 		<table>
 			<tr *ngIf="testResponse.version">
-				<th scope="row">Version</th>
-				<td>{{ testResponse.version }}</td>
+				<th scope="row" class="fs-6 text-white">Version</th>
+				<td class="fs-6 text-white">{{ testResponse.version }}</td>
 			</tr>
 		</table>
 	</ng-container>
 	</div>
-	
-	<div data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0">
-		<div class="w-100 h-100 pt-5 pb-5">
-			<h4 id="scrollspyHeading1">First heading</h4>
-			<p>This is some placeholder content for the scrollspy page. Note that as you scroll down the page, the appropriate navigation link is highlighted. It's repeated throughout the component example. We keep adding some more example copy here to emphasize the scrolling and highlighting.</p>	
-		</div>
-		
-		<div class="w-100 h-100 pt-5">
-			<app-actividades id="actividades"></app-actividades>
-		</div>
-		
-		<div class="w-100 h-100 pt-5">
-			<app-mapa id="mapa"></app-mapa>
-		</div>
-	  </div>
-	</div>
+
+</div>
 
 
