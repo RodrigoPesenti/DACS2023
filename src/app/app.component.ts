@@ -34,11 +34,17 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public iniciarSesion() {
-    this.keycloak.login();
+  message: string = "";
+
+  receiveMessage($event: any) {
+    this.message = $event;
+    if (this.message === "iniciarSesion") {
+      this.keycloak.login();
+    }
+    else if (this.message === "cerrarSesion") {
+      this.keycloak.logout();
+    }
   }
 
-  public cerrarSesion() {
-    this.keycloak.logout();
-  }
+ 
 }

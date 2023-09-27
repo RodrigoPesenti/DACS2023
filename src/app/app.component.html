@@ -1,5 +1,11 @@
 <div class="d-flex flex-col">
-	
+	<app-nav-bar 
+		[title]="title" 
+		[isLogueado]="isLogueado" 
+		(messageEvent)="receiveMessage($event)"
+		[perfilUsuario]="perfilUsuario"
+		>
+	</app-nav-bar>
 
 	<div class="fixed-bottom">
 	<ng-container *ngIf="testResponse">
