@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { IRequestTest } from '../models/request.interface';
 
-import { IResponse, ITestResponse } from '../models/response.interface';
+import { IResponse, IClimaResponse, IVersionResponse } from '../models/response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -23,10 +23,17 @@ export class ApiService {
             .pipe();
     }
 
-    getTest() {
-        const url ='assets/json/test.json';
+    getClima(){
+        const url ='assets/json/clima.json';
         return this.http
-            .get<ITestResponse>(url, this.headers)
+            .get<IClimaResponse>(url, this.headers)
+            .pipe();
+    }
+
+    getVersion() {
+        const url ='assets/json/version.json';
+        return this.http
+            .get<IVersionResponse>(url, this.headers)
             .pipe();
     }
 

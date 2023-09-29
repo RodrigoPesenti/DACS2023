@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
 import { ApiService } from './core/services/apiservice.service';
-import { ITestResponse } from './core/models/response.interface';
+import { IClimaResponse, IVersionResponse } from './core/models/response.interface';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { ITestResponse } from './core/models/response.interface';
 export class AppComponent implements OnInit {
   title = 'dacs2023';
   public isLogueado = false;
-  public testResponse : ITestResponse  | null = null;
+  public versionResponse : IVersionResponse  | null = null;
   public perfilUsuario: KeycloakProfile | null = null;
   public role = false;
   constructor(private readonly keycloak: KeycloakService,private apiService: ApiService) {}
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
     this.isLogueado = await this.keycloak.isLoggedIn();
     this.role=await this.keycloak.isUserInRole("ROLE-A");
-    this.apiService.getTest().subscribe(resp => {this.testResponse= resp});
+    this.apiService.getVersion().subscribe(resp => {this.versionResponse= resp});
     console.log ("role=====>", this.role );
     if(this.isLogueado && !this.role){
       this.keycloak.logout();

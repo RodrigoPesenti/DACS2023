@@ -1,0 +1,17 @@
+.large-orange-button {
+    background-color: orange; /* Color de fondo naranja */
+    color: white; /* Color del texto en blanco */
+    font-size: 70px; /* Tamaño del texto */
+    padding: 25px 100px; /* Espaciado interno (arriba/abajo y izquierda/derecha) */
+    border: none; /* Sin borde */
+    border-radius: 120px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse por encima */
+}
+  
+.large-orange-button:hover {
+    background-color: darkorange; /* Cambia el color de fondo al pasar el mouse por encima */
+}
+
+.gap-custom {
+    gap: 20rem; /* Ajusta este valor a la cantidad de espacio que desees */
+}

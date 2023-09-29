@@ -7,13 +7,15 @@
 		>
 	</app-nav-bar>
 
+	<app-inicio></app-inicio>
+
 	<div class="fixed-bottom">
-	<ng-container *ngIf="testResponse">
+	<ng-container *ngIf="versionResponse">
 		<h2 class="fs-6 text-white">Informacion version</h2>
 		<table>
-			<tr *ngIf="testResponse.version">
+			<tr *ngIf="versionResponse.version">
 				<th scope="row" class="fs-6 text-white">Version</th>
-				<td class="fs-6 text-white">{{ testResponse.version }}</td>
+				<td class="fs-6 text-white">{{ versionResponse.version }}</td>
 			</tr>
 		</table>
 	</ng-container>

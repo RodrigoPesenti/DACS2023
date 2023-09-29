@@ -6,7 +6,12 @@ export interface IResponse
         data: any;
     }
 
-    export interface ITestResponse
+    export interface IVersionResponse
     {
         version: string;
+    }
+
+    export interface IClimaResponse
+    {
+        clima: string;
     }
