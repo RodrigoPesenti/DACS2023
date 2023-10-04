@@ -1,26 +1,28 @@
-<div class="d-flex flex-col">
-	<app-nav-bar 
-		[title]="title" 
-		[isLogueado]="isLogueado" 
-		(messageEvent)="receiveMessage($event)"
-		[perfilUsuario]="perfilUsuario"
-		>
-	</app-nav-bar>
 
-	<app-inicio></app-inicio>
+    <app-nav-bar 
+        [title]="title" 
+        [isLogueado]="isLogueado" 
+        (messageEvent)="receiveMessage($event)"
+        [perfilUsuario]="perfilUsuario"
+    ></app-nav-bar>
 
-	<div class="fixed-bottom">
-	<ng-container *ngIf="versionResponse">
-		<h2 class="fs-6 text-white">Informacion version</h2>
-		<table>
-			<tr *ngIf="versionResponse.version">
-				<th scope="row" class="fs-6 text-white">Version</th>
-				<td class="fs-6 text-white">{{ versionResponse.version }}</td>
-			</tr>
-		</table>
-	</ng-container>
-	</div>
+        <div class="d-flex flex-column w-100 ">
+            <app-inicio></app-inicio>
+        </div>
 
-</div>
+        <div class="d-flex flex-column vh-100" id="actividades">
+            <app-actividades></app-actividades>
+        </div>
 
+    <div class="fixed-bottom">
+        <ng-container *ngIf="versionResponse">
+            <h2 class="fs-6 text-white">Informacion version</h2>
+            <table>
+                <tr *ngIf="versionResponse.version">
+                    <th scope="row" class="fs-6 text-white">Version</th>
+                    <td class="fs-6 text-white">{{ versionResponse.version }}</td>
+                </tr>
+            </table>
+        </ng-container>
+    </div>
 
