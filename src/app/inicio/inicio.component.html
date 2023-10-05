@@ -1,17 +1,18 @@
-<div class="d-flex flex-column gap-custom justify-content-center align-items-center vw-100 vh-100">
-    <div class="d-flex flex-row justify-content-center align-items-center mt-5">
-        <ng-container *ngIf="climaResponse">
-            <table>
-                <tr *ngIf="climaResponse.clima">
-                    <th scope="row" class="text-white display-1">El clima esta </th>
-                    <td class="text-white display-1">&nbsp;{{ climaResponse.clima }}</td>
-                </tr>
-            </table>
-        </ng-container>
-
-        <img src={{climaImagenURL}} class="img-fluid ms-5" style="width:10%;">
+<div class="d-flex flex-column justify-content-center align-items-center mt-5 pt-5">
+    
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <img src={{climaImagenURL}} class="img-fluid" style="width:10%;">
     </div>
-    <div>
+
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <ng-container *ngIf="climaResponse">
+            <h1 class="text-white display-1">El clima esta &nbsp;{{ climaResponse.clima }}</h1>
+        </ng-container>
+        
+    </div>
+
+    <div class="d-flex flex-row justify-content-center align-items-center mt-5 pt-5">
         <button type="button" class="large-orange-button" onclick="location.href='#actividades'">Actividades</button>
     </div>
+
 </div>
