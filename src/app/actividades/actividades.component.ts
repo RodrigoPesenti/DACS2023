@@ -30,8 +30,9 @@ export class ActividadesComponent implements OnInit {
         img.src = actividad.imagen; 
         img.classList.add('card-img-top');
         img.alt = 'Imagen de ' + actividad;
-        img.style.width = '250px'; 
-        img.style.height = '250px';  
+        img.style.objectFit = 'contain';
+        img.style.maxWidth = '100%'; 
+        img.style.height = 'auto';  
 
         const cardBodyDiv = document.createElement('div');
         cardBodyDiv.classList.add('card-body', 'justify-content-center', 'align-items-center');

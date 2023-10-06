@@ -1,4 +1,3 @@
-
     <app-nav-bar 
         [title]="title" 
         [isLogueado]="isLogueado" 
@@ -6,13 +5,13 @@
         [perfilUsuario]="perfilUsuario"
     ></app-nav-bar>
 
-        <div class="d-flex flex-column w-100 ">
-            <app-inicio></app-inicio>
-        </div>
+    <div class="d-flex flex-column vh-100" id="inicio">
+         <app-inicio></app-inicio>
+    </div>
 
-        <div class="d-flex flex-column vh-100" id="actividades">
-            <app-actividades></app-actividades>
-        </div>
+    <div class="d-flex flex-column vh-100" id="actividades">
+        <app-actividades></app-actividades>
+    </div>
 
     <div class="fixed-bottom">
         <ng-container *ngIf="versionResponse">
