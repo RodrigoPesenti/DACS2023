@@ -1,16 +1,42 @@
 .large-orange-button {
-    background-color: orange; /* Color de fondo naranja */
-    color: white; /* Color del texto en blanco */
-    font-size: 70px; /* Tamaño del texto */
-    padding: 25px 100px; /* Espaciado interno (arriba/abajo y izquierda/derecha) */
-    border: none; /* Sin borde */
-    border-radius: 120px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse por encima */
-}
+    display: inline-block;
+    padding: 30px 40px;
+    font-size: 30px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: orange;
+    border: none;
+    border-radius: 60px;
+    position: relative;
+    transition: all 0.5s;
+  }
   
-.large-orange-button:hover {
-    background-color: darkorange; /* Cambia el color de fondo al pasar el mouse por encima */
-}
+  .large-orange-button:hover {
+    background-color: #ff7f00;
+  }
+  
+  .large-orange-button:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translate(-50%, 100%);
+    width: 0;
+    height: 0;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-top: 20px solid transparent;
+    transition: all 0.5s;
+    opacity: 0;
+  }
+  
+  .large-orange-button:hover:after {
+    border-top-color: #ff7f00;
+    opacity: 1;
+  }
 
 .gap-custom {
     gap: 20rem; /* Ajusta este valor a la cantidad de espacio que desees */
