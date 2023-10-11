@@ -1,0 +1,9 @@
+#navbar{
+    border-radius: 15px;
+}
+
+#contenedor-perfil{
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-color: white;
+}
