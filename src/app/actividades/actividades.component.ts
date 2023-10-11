@@ -8,9 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class ActividadesComponent implements OnInit {
 
   actividades = [
-      {nombre: 'Senderismo', imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh6U-EGbMj_-0-Sn4mpy6Sj5sT9B1kCx7crw&usqp=CAU' } ,
+      {nombre: 'Senderismo', imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRfFIHA0tmqGr2xIjnvFdIU8htfx0UzsMctg&usqp=CAU' } ,
       {nombre: 'Ciclismo', imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRfFIHA0tmqGr2xIjnvFdIU8htfx0UzsMctg&usqp=CAU' }, 
-      {nombre: 'Correr', imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQr_9MZXudv7iRzwFPVIgyIb1dTALgE-cLbSg&usqp=CAU' } ,
+      {nombre: 'Correr', imagen: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRfFIHA0tmqGr2xIjnvFdIU8htfx0UzsMctg&usqp=CAU' } ,
     ];
 
   ngOnInit(): void {
@@ -32,15 +32,15 @@ export class ActividadesComponent implements OnInit {
         img.alt = 'Imagen de ' + actividad;
         img.style.objectFit = 'contain';
         img.style.maxWidth = '100%'; 
-        img.style.height = '250px';  
+        img.style.height = '100%';  
 
         const cardBodyDiv = document.createElement('div');
         cardBodyDiv.classList.add('card-body', 'justify-content-center', 'align-items-center');
 
-        const cardTitle = document.createElement('h1');
-        cardTitle.classList.add('card-title', 'text-center');
+        const cardTitle = document.createElement('h5');
+        cardTitle.classList.add('card-title', 'text-center', 'mb-0');
         cardTitle.textContent = actividad.nombre;
-
+        cardTitle.style.fontSize = '3vw';
         
 
         cardBodyDiv.appendChild(cardTitle);

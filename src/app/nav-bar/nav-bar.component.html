@@ -5,8 +5,8 @@
 		  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 	    	<span class="navbar-toggler-icon"></span>
 		  </button>
-		  <div class="collapse navbar-collapse d-flex align-items-center" id="navbarNavDropdown">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav me-auto">
 			  <li class="nav-item">
 				<a class="nav-link" href="#inicio">Inicio</a>
 			  </li>
@@ -15,22 +15,22 @@
 			  </li>
 			  <li class="nav-item">
 				<a class="nav-link" href="#mapa">Mapa</a>
-			  </li>
-			  <div class="container ps-0" id="contenedor-perfil">
-				<button *ngIf="!isLogueado" type="button" class="btn btn-secondary rounded-pill" (click)="iniciarSesion()">Iniciar Session</button>
-				<ul *ngIf="isLogueado" class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item dropdown ">
-						<a class="nav-link dropdown-toggle" *ngIf="perfilUsuario" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							{{ perfilUsuario.username }}
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="#" (click)="toggleModal()">Preferencias</a></li>
-							<li><a class="dropdown-item" *ngIf="isLogueado" href="#" (click)="cerrarSesion()">Cerrar Sesion</a></li>
-						</ul>
-					</li>
-				</ul>	
-		  	</div>	
+			  </li>	
 			</ul>
+		<div class="container d-sm-flex justify-content-end ps-0 pe-0" id="contenedor-perfil">
+		    <button *ngIf="!isLogueado" type="button" class="btn btn-secondary" id="botonInicio" (click)="iniciarSesion()">Iniciar Session</button>
+		    <ul *ngIf="isLogueado" class="navbar-nav ms-auto">
+			<li class="nav-item dropdown ">
+			    <a class="nav-link dropdown-toggle" *ngIf="perfilUsuario" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				{{ perfilUsuario.username }}
+			    </a>
+			    <ul class="dropdown-menu dropdown-menu-end">
+				<li><a class="dropdown-item" href="#" (click)="toggleModal()">Preferencias</a></li>
+				<li><a class="dropdown-item" *ngIf="isLogueado" href="#" (click)="cerrarSesion()">Cerrar Sesion</a></li>
+			    </ul>
+			</li>
+		    </ul>    
+		</div>
 		  </div>	  
 		</div>
 	</nav>	
