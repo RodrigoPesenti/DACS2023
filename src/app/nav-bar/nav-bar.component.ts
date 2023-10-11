@@ -24,4 +24,9 @@ export class NavBarComponent {
   cerrarSesion() {
     this.messageEvent.emit("cerrarSesion");
   }
+
+  toggleModal() {
+    const modal: any = document.querySelector('.modal');
+    modal.style.display = 'block';
+  }
 }

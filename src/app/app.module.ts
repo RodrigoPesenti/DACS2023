@@ -11,19 +11,23 @@ import { ActividadesComponent } from './actividades/actividades.component';
 import { MapaComponent } from './mapa/mapa.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { PreferenciasComponent } from './preferencias/preferencias.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
     ActividadesComponent,
     MapaComponent,
     NavBarComponent,
-    InicioComponent
+    InicioComponent,
+    PreferenciasComponent
   ],
   imports: [
     BrowserModule,
     KeycloakAngularModule,
     AppRoutingModule,
-    HttpClientModule  
+    HttpClientModule,
+    FormsModule  
   ],
   providers: [
     {

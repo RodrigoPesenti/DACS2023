@@ -24,7 +24,7 @@
 							{{ perfilUsuario.username }}
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="#">Preferencias</a></li>
+							<li><a class="dropdown-item" href="#" (click)="toggleModal()">Preferencias</a></li>
 							<li><a class="dropdown-item" *ngIf="isLogueado" href="#" (click)="cerrarSesion()">Cerrar Sesion</a></li>
 						</ul>
 					</li>
