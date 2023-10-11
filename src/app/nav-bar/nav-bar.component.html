@@ -1,11 +1,11 @@
 <div class="d-flex flex-col">
-	<nav id="navbar" class="navbar fixed-top bg-dark navbar-expand-lg bg-body-tertiary rounded-pill mt-2 ms-2 me-2" data-bs-theme="dark">
-		<div class="container-fluid">
+	<nav id="navbar" class="navbar fixed-top bg-dark navbar-expand-sm bg-body-tertiary mt-2 ms-2 me-2" data-bs-theme="dark">
+		<div class="container-fluid d-flex align-items-start">
 		  <a class="navbar-brand" href="#">{{title}}</a>
 		  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 	    	<span class="navbar-toggler-icon"></span>
 		  </button>
-		  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+		  <div class="collapse navbar-collapse d-flex align-items-center" id="navbarNavDropdown">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 			  <li class="nav-item">
 				<a class="nav-link" href="#inicio">Inicio</a>
@@ -15,11 +15,11 @@
 			  </li>
 			  <li class="nav-item">
 				<a class="nav-link" href="#mapa">Mapa</a>
-			</ul>
-			<div class="container d-flex justify-content-end pe-0">
+			  </li>
+			  <div class="container ps-0" id="contenedor-perfil">
 				<button *ngIf="!isLogueado" type="button" class="btn btn-secondary rounded-pill" (click)="iniciarSesion()">Iniciar Session</button>
 				<ul *ngIf="isLogueado" class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item dropdown">
+					<li class="nav-item dropdown ">
 						<a class="nav-link dropdown-toggle" *ngIf="perfilUsuario" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							{{ perfilUsuario.username }}
 						</a>
@@ -30,6 +30,7 @@
 					</li>
 				</ul>	
 		  	</div>	
+			</ul>
 		  </div>	  
 		</div>
 	</nav>	
