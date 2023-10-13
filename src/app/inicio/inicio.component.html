@@ -1,16 +1,16 @@
 <div class="d-flex flex-column justify-content-center align-items-center 100vh">
     
-    <div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="text-center">
         <img src={{climaImagenURL}} class="img-fluid" style="width:10%;">
     </div>
 
-    <div class="d-flex flex-row justify-content-center align-items-center">
+    <div class="text-center">
         <ng-container *ngIf="climaResponse">
             <h1 class="text-white display-1">El clima esta&nbsp;{{ climaResponse.clima }}</h1>
         </ng-container>    
     </div>
 
-    <div class="d-flex flex-row justify-content-center align-items-center mt-5 pt-5">
+    <div class="gap-custom">
         <button type="button" class="large-orange-button" onclick="location.href='#actividades'">Actividades</button>
     </div>
 
