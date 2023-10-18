@@ -24,6 +24,11 @@ public class HomeController {
         return "Hello from DACS MS CONECTOR ping";
     }
 
+	@GetMapping(value = "/hola")
+    public Object hola() {
+        return "hola o/";
+    }
+	
 	@GetMapping(value = "/version")
     public Object version() {
         return ApplicationContextProvider.getApplicationContext().getBean("buildInfo");
