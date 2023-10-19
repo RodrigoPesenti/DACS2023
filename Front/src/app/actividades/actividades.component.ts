@@ -7,6 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActividadesComponent implements OnInit {
 
+
+
+
+sonidoCard() { 
+        var sonido = new Audio('../../assets/sounds/CardSound.mp3'); // Reemplaza 'ruta/al/sonido.mp3' con la ruta correcta de tu archivo de sonido
+        sonido.volume = 0.5;
+        sonido.play();
+}
+
+
+
   actividades = [
       {nombre: 'Pesca', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
       {nombre: 'Senderismo', imagen: 'https://media-public.canva.com/mQYyw/MAEWSDmQYyw/1/tl.png' }, 
@@ -17,45 +28,8 @@ export class ActividadesComponent implements OnInit {
     ];
 
   ngOnInit(): void {
-    this.createCards();
   }
 
-  createCards(): void {
-    const principalDiv = document.getElementById('principal');
-
-    if (principalDiv) {
-      this.actividades.forEach(actividad => {
-        const cardDiv = document.createElement('div');
-        cardDiv.classList.add('card', 'p-1', 'mx-2');
-        cardDiv.style.width = '18vw';
-        cardDiv.style.height = '18vw';
-
-        const img = document.createElement('img');
-        img.src = actividad.imagen;
-        img.classList.add('card-img-top', "mt-4");
-        img.alt = 'Imagen de ' + actividad;
-        img.style.objectFit = 'contain';
-        img.style.maxWidth = '10vw';
-        img.style.height = '10vw';
-        img.style.display = 'block';
-        img.style.margin = 'auto';
-
-        const cardBodyDiv = document.createElement('div');
-        cardBodyDiv.classList.add('card-body');
-
-        const cardTitle = document.createElement('h5');
-        cardTitle.classList.add('card-title', 'text-center', 'mb-0');
-        cardTitle.textContent = actividad.nombre;
-        cardTitle.style.fontSize = '2vw';
-        
-
-        cardBodyDiv.appendChild(cardTitle);
-
-        cardDiv.appendChild(img);
-        cardDiv.appendChild(cardBodyDiv);
-
-        principalDiv.appendChild(cardDiv);
-      });
-    }
-  }
 }
+
+
