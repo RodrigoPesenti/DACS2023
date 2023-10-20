@@ -1,12 +1,16 @@
 <audio id="sonido">
-  <source src="..\..\assets\sounds\CardSound.mp3" type="audio/mpeg">
+  <source src="..\..\assets\sounds\CardSound.mp3" type="audio/mpeg" />
   Tu navegador no admite la reproducción de sonido.
 </audio>
 
 <div class="d-flex flex-wrap justify-content-center gap-3">
-    <div class="d-flex flex-column col-sm-3 hover-div p-3 justify-content-center align-items-center" onclick="location.href='#mapa'" (mouseenter)="sonidoCard()" *ngFor="let actividad of actividades">
-      <img [src]="actividad.imagen" width="50%">
-      <h3>{{actividad.nombre}}</h3>
-    </div>
+  <div
+    class="d-flex flex-column col-sm-3 hover-div p-3 justify-content-center align-items-center"
+    (click)="alApretarBoton(actividad.nombre)"
+    (mouseenter)="sonidoCard()"
+    *ngFor="let actividad of actividades"
+  >
+    <img [src]="actividad.imagen" width="50%" />
+    <h3>{{ actividad.nombre }}</h3>
+  </div>
 </div>
-  

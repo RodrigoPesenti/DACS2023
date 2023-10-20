@@ -7,16 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActividadesComponent implements OnInit {
 
-
-
+//URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
+private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
+private ubicacion:string = "Concepción+del+Uruguay"
 
 sonidoCard() { 
         var sonido = new Audio('../../assets/sounds/CardSound.mp3'); // Reemplaza 'ruta/al/sonido.mp3' con la ruta correcta de tu archivo de sonido
         sonido.volume = 0.5;
         sonido.play();
 }
-
-
 
   actividades = [
       {nombre: 'Pesca', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
@@ -27,7 +26,24 @@ sonidoCard() {
       {nombre: 'Football', imagen: 'https://media-public.canva.com/IpIqA/MAEiSZIpIqA/1/tl.png'}
     ];
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.actualizarMapa(this.ubicacion);
+  }
+
+  actualizarMapa(cadenaBuscada:string){
+    var iframe = document.getElementById('mapaGoogle');
+
+    if (iframe) {
+      console.log(iframe.getAttribute('src'));
+      var nuevoSrc = this.urlBase + cadenaBuscada;
+      iframe.setAttribute('src', nuevoSrc);
+    }
+  }
+
+  alApretarBoton(nombreBoton:string): void {
+    location.href = '#mapa';
+    let nuevaURL = nombreBoton + "," + this.ubicacion;
+    this.actualizarMapa(nuevaURL);
   }
 
 }
