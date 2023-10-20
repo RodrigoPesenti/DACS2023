@@ -2,6 +2,10 @@ h1{
     color:white
 }
 
+h3{
+    font-size: 1.5vw;
+}
+
 .hover-div {
     border-top: 1px solid #f8f8f8;
     background: #f8f8f8;
@@ -9,6 +13,10 @@ h1{
     -webkit-transition: all 0s;
     transition: all 0.3s;
     margin: 10px 0px;
+    min-width: 80px;
+    min-height: 80px;
+    width: 14vw;   
+    height: 14vw;
 }
 
 .hover-div:hover {

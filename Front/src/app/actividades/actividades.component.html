@@ -3,9 +3,9 @@
   Tu navegador no admite la reproducción de sonido.
 </audio>
 
-<div class="d-flex flex-wrap justify-content-center vw-100 gap-3" id="principal">
+<div class="d-flex flex-wrap justify-content-center gap-3">
     <div class="d-flex flex-column col-sm-3 hover-div p-3 justify-content-center align-items-center" onclick="location.href='#mapa'" (mouseenter)="sonidoCard()" *ngFor="let actividad of actividades">
-      <img [src]="actividad.imagen" width="100">
+      <img [src]="actividad.imagen" width="50%">
       <h3>{{actividad.nombre}}</h3>
     </div>
 </div>
