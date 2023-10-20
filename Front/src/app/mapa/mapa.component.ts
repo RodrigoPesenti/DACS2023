@@ -7,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MapaComponent implements OnInit {
 
+  //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
+  private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
+  private ubicacion:string = "Concepción+del+Uruguay"
+
   actividades = [
     {nombre: 'Pesca', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
     {nombre: 'Senderismo', imagen: 'https://media-public.canva.com/mQYyw/MAEWSDmQYyw/1/tl.png' }, 
@@ -19,21 +23,22 @@ export class MapaComponent implements OnInit {
   constructor(){}
 
   async ngOnInit() {
-    this.actualizarMapa("Concepcion del Uruguay");
+    this.actualizarMapa(this.ubicacion);
   }
 
   actualizarMapa(cadenaBuscada:string){
     var iframe = document.getElementById('mapaGoogle');
 
     if (iframe) {
-      var srcActual = iframe.getAttribute('src');
-      var nuevoSrc = srcActual + cadenaBuscada;
+      console.log(iframe.getAttribute('src'));
+      var nuevoSrc = this.urlBase + cadenaBuscada;
       iframe.setAttribute('src', nuevoSrc);
     }
   }
 
-  //Falta implementar su funcionalidad al apretar las diferentes imagenes
-  onButtonClick(): void {
-    this.actualizarMapa("Pesca");
+  alApretarBoton(nombreBoton:string): void {
+    location.href = '#mapa';
+    let nuevaURL = nombreBoton + "," + this.ubicacion;
+    this.actualizarMapa(nuevaURL);
   }
 }

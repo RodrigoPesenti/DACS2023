@@ -2,7 +2,7 @@
   <div class="d-flex flex-wrap justify-content-center gap-3" id="principal">
     <div
       class="d-flex flex-column col-sm-3 hover-div p-3 justify-content-center align-items-center"
-      onclick="location.href='#mapa'"
+      (click)="alApretarBoton(actividad.nombre)"
       *ngFor="let actividad of actividades"
     >
       <img [src]="actividad.imagen" width="50vw" height="50vw" />
@@ -18,7 +18,7 @@
       loading="lazy"
       allowfullscreen
       referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q="
+      src=""
     >
     </iframe>
   </div>
