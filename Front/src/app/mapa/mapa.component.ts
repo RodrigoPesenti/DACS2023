@@ -16,23 +16,24 @@ export class MapaComponent implements OnInit {
     {nombre: 'Football', imagen: 'https://media-public.canva.com/IpIqA/MAEiSZIpIqA/1/tl.png'}
   ];
 
-  public busqueda = ""
-
   constructor(){}
 
-  public async ngOnInit() {
-    // Selecciona el elemento iframe por su etiqueta
-    var iframe = document.querySelector('iframe');
+  async ngOnInit() {
+    this.actualizarMapa("Concepcion del Uruguay");
+  }
+
+  actualizarMapa(cadenaBuscada:string){
+    var iframe = document.getElementById('mapaGoogle');
 
     if (iframe) {
-      // Obtiene el valor actual del atributo src
       var srcActual = iframe.getAttribute('src');
-
-      // Concatena la variable al final del valor actual del atributo src
-      var nuevoSrc = srcActual + "Hotel";
-
-      // Asigna el nuevo valor del atributo src al iframe
+      var nuevoSrc = srcActual + cadenaBuscada;
       iframe.setAttribute('src', nuevoSrc);
     }
+  }
+
+  //Falta implementar su funcionalidad al apretar las diferentes imagenes
+  onButtonClick(): void {
+    this.actualizarMapa("Pesca");
   }
 }
