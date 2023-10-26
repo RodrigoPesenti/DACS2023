@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import utn.dacs.ms.backend.dto.ActividadDto;
 import utn.dacs.ms.backend.dto.UsuarioDto;
 import utn.dacs.ms.backend.exceptions.ResourceNotFoundException;
+import utn.dacs.ms.backend.model.entity.Actividad;
 import utn.dacs.ms.backend.model.entity.Usuario;
 import utn.dacs.ms.backend.service.UsuarioService;
 
@@ -42,15 +44,30 @@ public class UsuarioController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDto> getById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-		Optional<Usuario> alumno = usuarioService.getById(id);
+		Optional<Usuario> usuario = usuarioService.getById(id);
 
-		if (alumno.isEmpty()) {
+		if (usuario.isEmpty()) {
 			throw new ResourceNotFoundException("");
 		}
-		UsuarioDto data = modelMapper.map(alumno.get(), UsuarioDto.class);
+		UsuarioDto data = modelMapper.map(usuario.get(), UsuarioDto.class);
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
 	}
 
+	@GetMapping("/{id}/preferencias")
+    public ResponseEntity<List<ActividadDto>> getPreferenciasByUsuarioId(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+        Optional<Usuario> usuarioOptional = usuarioService.getById(id);
+
+        if (usuarioOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Usuario not found");
+        }
+
+        Usuario usuario = usuarioOptional.get();
+        List<Actividad> preferencias = usuario.getPreferencias();
+		List<ActividadDto> data = preferencias.stream().map(preferencia -> modelMapper.map(preferencia, ActividadDto.class))
+				.collect(Collectors.toList());
+		return new ResponseEntity<List<ActividadDto>>(data, HttpStatus.OK);
+    }
+	
 	@PostMapping("")
 	public ResponseEntity<UsuarioDto> create(@RequestBody UsuarioDto usuarioDto) {
 		Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);

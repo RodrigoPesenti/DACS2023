@@ -62,7 +62,7 @@ public class ActividadController {
 	public ResponseEntity<ActividadDto> update(@RequestBody ActividadDto actividadDto) throws ResourceNotFoundException {
 
 		if (actividadDto.getId() == null || !actividadService.existById(actividadDto.getId())) {
-			throw a ResourceNotFoundException("");
+			throw new ResourceNotFoundException("");
 		}
 
 		Actividad actividad = modelMapper.map(actividadDto, Actividad.class);
