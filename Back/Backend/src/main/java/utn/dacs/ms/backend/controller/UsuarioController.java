@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import utn.dacs.ms.backend.dto.ActividadDto;
+import utn.dacs.ms.backend.dto.UsuarioActividadDto;
 import utn.dacs.ms.backend.dto.UsuarioDto;
 import utn.dacs.ms.backend.exceptions.ResourceNotFoundException;
+import utn.dacs.ms.backend.model.entity.Actividad;
 import utn.dacs.ms.backend.model.entity.Usuario;
 import utn.dacs.ms.backend.model.entity.UsuarioActividad;
+import utn.dacs.ms.backend.service.UsuarioActividadService;
 import utn.dacs.ms.backend.service.UsuarioService;
 
 @RestController
@@ -31,6 +34,9 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
+	@Autowired
+	private UsuarioActividadService usuarioActividadService;
+	
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -73,6 +79,23 @@ public class UsuarioController {
 		Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
 		UsuarioDto data = modelMapper.map(usuarioService.save(usuario), UsuarioDto.class);
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
+	}
+	
+	@PostMapping("/{id}")
+	public ResponseEntity<UsuarioActividadDto> create(@PathVariable(value = "id") Long id, @RequestBody ActividadDto actividadDto) throws ResourceNotFoundException {
+		Optional<Usuario> usuarioOptional = usuarioService.getById(id);
+
+        if (usuarioOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Usuario not found");
+        }
+
+        Usuario usuario = usuarioOptional.get();
+		Actividad actividad = modelMapper.map(actividadDto, Actividad.class);
+		UsuarioActividad usuarioActividad = new UsuarioActividad();
+		usuarioActividad.setActividad(actividad);
+		usuarioActividad.setUsuario(usuario);
+		UsuarioActividadDto data = modelMapper.map(usuarioActividadService.save(usuarioActividad), UsuarioActividadDto.class);
+		return new ResponseEntity<UsuarioActividadDto>(data, HttpStatus.OK);
 	}
 
 	@PutMapping("")
