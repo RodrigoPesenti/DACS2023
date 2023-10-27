@@ -1,11 +1,10 @@
 package utn.dacs.ms.backend.dto;
 
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
-import utn.dacs.ms.backend.model.entity.Usuario;
-
-@Data
+@Getter
+@Setter
 public class ActividadDto {
 
 	private Long id;
@@ -17,5 +16,4 @@ public class ActividadDto {
 	private Float precipitacionmin;
 	private Float precipitacionmax;
 	
-	private List<Usuario> usuarios;
 }

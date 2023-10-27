@@ -6,11 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Actividad {
 	
@@ -26,6 +28,6 @@ public class Actividad {
 	private Float precipitacionmin;
 	private Float precipitacionmax;
 	
-	@ManyToMany(mappedBy = "preferencias")
-    private List<Usuario> usuarios;
+	@OneToMany(mappedBy="actividad")
+    private List<UsuarioActividad> preferencias;
 }

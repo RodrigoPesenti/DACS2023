@@ -1,16 +1,13 @@
 package utn.dacs.ms.backend.dto;
 
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
-import utn.dacs.ms.backend.model.entity.Actividad;
-
-@Data
+@Getter
+@Setter
 public class UsuarioDto {
 
 	private Long id;
 	private String nombre;
-
-	private List<Actividad> preferencias;
 	
 }

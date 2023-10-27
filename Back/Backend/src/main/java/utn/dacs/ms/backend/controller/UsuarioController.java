@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import utn.dacs.ms.backend.dto.ActividadDto;
 import utn.dacs.ms.backend.dto.UsuarioDto;
 import utn.dacs.ms.backend.exceptions.ResourceNotFoundException;
-import utn.dacs.ms.backend.model.entity.Actividad;
 import utn.dacs.ms.backend.model.entity.Usuario;
+import utn.dacs.ms.backend.model.entity.UsuarioActividad;
 import utn.dacs.ms.backend.service.UsuarioService;
 
 @RestController
@@ -62,8 +62,8 @@ public class UsuarioController {
         }
 
         Usuario usuario = usuarioOptional.get();
-        List<Actividad> preferencias = usuario.getPreferencias();
-		List<ActividadDto> data = preferencias.stream().map(preferencia -> modelMapper.map(preferencia, ActividadDto.class))
+        List<UsuarioActividad> preferencias = usuario.getPreferencias();
+		List<ActividadDto> data = preferencias.stream().map(preferencia -> modelMapper.map(preferencia.getActividad(), ActividadDto.class))
 				.collect(Collectors.toList());
 		return new ResponseEntity<List<ActividadDto>>(data, HttpStatus.OK);
     }
