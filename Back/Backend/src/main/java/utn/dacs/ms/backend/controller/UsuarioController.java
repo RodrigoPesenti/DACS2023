@@ -24,6 +24,7 @@ import utn.dacs.ms.backend.exceptions.ResourceNotFoundException;
 import utn.dacs.ms.backend.model.entity.Actividad;
 import utn.dacs.ms.backend.model.entity.Usuario;
 import utn.dacs.ms.backend.model.entity.UsuarioActividad;
+import utn.dacs.ms.backend.service.ActividadService;
 import utn.dacs.ms.backend.service.UsuarioActividadService;
 import utn.dacs.ms.backend.service.UsuarioService;
 
@@ -33,6 +34,9 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private ActividadService actividadService;
 
 	@Autowired
 	private UsuarioActividadService usuarioActividadService;
@@ -81,22 +85,27 @@ public class UsuarioController {
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
 	}
 	
-	@PostMapping("/{id}")
-	public ResponseEntity<UsuarioActividadDto> create(@PathVariable(value = "id") Long id, @RequestBody ActividadDto actividadDto) throws ResourceNotFoundException {
-		Optional<Usuario> usuarioOptional = usuarioService.getById(id);
+	@PostMapping("/{usuarioId}/{actividadId}")
+	public ResponseEntity<UsuarioActividadDto> create(
+	        @PathVariable(value = "usuarioId") Long usuarioId,
+	        @PathVariable(value = "actividadId") Long actividadId) throws ResourceNotFoundException {
 
-        if (usuarioOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Usuario not found");
-        }
+	    Optional<Usuario> usuarioOptional = usuarioService.getById(usuarioId);
+	    Optional<Actividad> actividadOptional = actividadService.getById(actividadId);
 
-        Usuario usuario = usuarioOptional.get();
-		Actividad actividad = modelMapper.map(actividadDto, Actividad.class);
-		UsuarioActividad usuarioActividad = new UsuarioActividad();
-		usuarioActividad.setActividad(actividad);
-		usuarioActividad.setUsuario(usuario);
-		UsuarioActividadDto data = modelMapper.map(usuarioActividadService.save(usuarioActividad), UsuarioActividadDto.class);
-		return new ResponseEntity<UsuarioActividadDto>(data, HttpStatus.OK);
+	    if (usuarioOptional.isEmpty() || actividadOptional.isEmpty()) {
+	        throw new ResourceNotFoundException("Usuario or Actividad not found");
+	    }
+
+	    Usuario usuario = usuarioOptional.get();
+	    Actividad actividad = actividadOptional.get();
+	    UsuarioActividad usuarioActividad = new UsuarioActividad();
+	    usuarioActividad.setActividad(actividad);
+	    usuarioActividad.setUsuario(usuario);
+	    UsuarioActividadDto data = modelMapper.map(usuarioActividadService.save(usuarioActividad), UsuarioActividadDto.class);
+	    return new ResponseEntity<>(data, HttpStatus.OK);
 	}
+
 
 	@PutMapping("")
 	public ResponseEntity<UsuarioDto> update(@RequestBody UsuarioDto usuarioDto) throws ResourceNotFoundException {

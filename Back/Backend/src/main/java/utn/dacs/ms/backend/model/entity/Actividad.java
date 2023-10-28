@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,5 +31,6 @@ public class Actividad {
 	private Float precipitacionmax;
 	
 	@OneToMany(mappedBy="actividad")
+	@JsonIgnore
     private List<UsuarioActividad> preferencias;
 }
