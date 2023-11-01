@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { IRequestTest } from '../models/request.interface';
 
-import { IResponse, IClimaResponse, IVersionResponse } from '../models/response.interface';
+import { IResponse, IClimaResponse, IVersionResponse, IPreferencia } from '../models/response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -15,11 +15,17 @@ export class ApiService {
 
     }
 
-
     getPing() {
         const url = `${environment.backendForFrontendUrl}/ping`;
         return this.http
             .get(url, { responseType: 'text' })
+            .pipe();
+    }
+
+    getPreferenciasUsuario(nombreUsuario: string){
+        const url =`http://localhost:9003/backend/usuario/2/preferencias`;
+        return this.http
+            .get<IPreferencia[]>(url, this.headers)
             .pipe();
     }
 

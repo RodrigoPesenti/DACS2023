@@ -62,10 +62,36 @@ public class UsuarioController {
 		UsuarioDto data = modelMapper.map(usuario.get(), UsuarioDto.class);
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
 	}
+	
+	@GetMapping("/nombre/{nombreUsuario}")
+	public ResponseEntity<UsuarioDto> getByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) throws ResourceNotFoundException {
+		Optional<Usuario> usuario = usuarioService.getByNombre(nombreUsuario);
 
+		if (usuario.isEmpty()) {
+			throw new ResourceNotFoundException("");
+		}
+		UsuarioDto data = modelMapper.map(usuario.get(), UsuarioDto.class);
+		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
+	}
+	
 	@GetMapping("/{id}/preferencias")
     public ResponseEntity<List<ActividadDto>> getPreferenciasByUsuarioId(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Optional<Usuario> usuarioOptional = usuarioService.getById(id);
+
+        if (usuarioOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Usuario not found");
+        }
+
+        Usuario usuario = usuarioOptional.get();
+        List<UsuarioActividad> preferencias = usuario.getPreferencias();
+		List<ActividadDto> data = preferencias.stream().map(preferencia -> modelMapper.map(preferencia.getActividad(), ActividadDto.class))
+				.collect(Collectors.toList());
+		return new ResponseEntity<List<ActividadDto>>(data, HttpStatus.OK);
+    }
+	
+	@GetMapping("/nombre/{nombreUsuario}/preferencias")
+    public ResponseEntity<List<ActividadDto>> getPreferenciasByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) throws ResourceNotFoundException {
+        Optional<Usuario> usuarioOptional = usuarioService.getByNombre(nombreUsuario);
 
         if (usuarioOptional.isEmpty()) {
             throw new ResourceNotFoundException("Usuario not found");

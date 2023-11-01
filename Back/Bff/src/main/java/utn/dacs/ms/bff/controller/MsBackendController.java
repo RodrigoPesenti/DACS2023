@@ -16,21 +16,21 @@ import utn.dacs.ms.bff.service.MsApiBackendService;
 import utn.dacs.ms.bff.service.MsApiConectorService;
 
 @RestController
-@RequestMapping("/conector")
+@RequestMapping("/backend")
 @Slf4j
-public class MsBffController {
+public class MsBackendController {
 
     @Autowired
-    private MsApiConectorService apiConectorService;
+    private MsApiBackendService apiBackendService;
 
     @GetMapping("/ping")
     public String ping() {
-        return apiConectorService.ping();
+        return apiBackendService.ping();
     }
     
     @GetMapping("/version")
     public BuildInfoDTO getPropuestas() {
-        return apiConectorService.version();
+        return apiBackendService.version();
     }
 
     /*

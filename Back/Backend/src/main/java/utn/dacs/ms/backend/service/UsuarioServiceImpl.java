@@ -22,6 +22,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public Optional<Usuario> getByNombre(String nombre) {
+        return usuarioRepository.getByNombre(nombre);
+    }
+	
+	@Override
 	public List<Usuario> getAll() {
 		return usuarioRepository.findAll();
 	}
