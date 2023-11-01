@@ -40,3 +40,4 @@
 [01/Nov/2023:20:24:59 -0300] 0:0:0:0:0:0:0:1 "GET /backend/usuario HTTP/1.1" 200 (664 ms)
 [01/Nov/2023:20:25:07 -0300] 0:0:0:0:0:0:0:1 "GET /bff/backend/ping HTTP/1.1" 404 (4 ms)
 [01/Nov/2023:20:26:07 -0300] 0:0:0:0:0:0:0:1 "GET /backend/ping HTTP/1.1" 200 (7 ms)
+[01/Nov/2023:20:44:37 -0300] 127.0.0.1 "GET /backend/ping HTTP/1.1" 200 (233 ms)
