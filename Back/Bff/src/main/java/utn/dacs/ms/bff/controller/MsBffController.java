@@ -22,7 +22,7 @@ public class MsBffController {
 
     @Autowired
     private MsApiConectorService apiConectorService;
-
+    
     @GetMapping("/ping")
     public String ping() {
         return apiConectorService.ping();
@@ -32,7 +32,7 @@ public class MsBffController {
     public BuildInfoDTO getPropuestas() {
         return apiConectorService.version();
     }
-
+    
     /*
     @GetMapping("/reason")
     public List<ReasonDTO> getMotivos() {

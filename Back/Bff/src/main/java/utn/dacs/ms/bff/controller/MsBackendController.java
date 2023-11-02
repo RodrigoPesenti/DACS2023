@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+import utn.dacs.ms.bff.dto.ActividadDto;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
 import utn.dacs.ms.bff.service.MsApiBackendService;
 import utn.dacs.ms.bff.service.MsApiConectorService;
@@ -33,6 +34,11 @@ public class MsBackendController {
         return apiBackendService.version();
     }
 
+    
+    @GetMapping("usuario/nombre/{nombreUsuario}/preferencias")
+    public ResponseEntity<List<ActividadDto>> getPreferenciasByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) {
+    	return apiBackendService.getPreferenciasByNombre(nombreUsuario);
+    }
     /*
     @GetMapping("/reason")
     public List<ReasonDTO> getMotivos() {

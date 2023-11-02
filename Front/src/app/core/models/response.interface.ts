@@ -11,6 +11,11 @@ export interface IResponse
         version: string;
     }
 
+    export interface IUsuario {
+        id: number;
+        nombre: string;
+    }
+
     export interface IPreferencia {
         id: number;
         nombre: string;

@@ -19,5 +19,10 @@ public class HomeController {
     public Object version() {
         return ApplicationContextProvider.getApplicationContext().getBean("buildInfo");
     }
+	
+	@GetMapping(value = "/test")
+    public Object test() {
+        return "This is a test";
+    }
 
 }
