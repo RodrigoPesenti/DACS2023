@@ -6,11 +6,11 @@
 <div class="d-flex flex-wrap justify-content-center gap-3">
   <div
     class="d-flex flex-column col-sm-3 hover-div p-3 justify-content-center align-items-center"
-    (click)="alApretarBoton(actividad.nombre)"
+    (click)="buscarEnMapa(actividad.nombre)"
     (mouseenter)="sonidoCard()"
-    *ngFor="let actividad of actividades"
+    *ngFor="let actividad of preferenciasResponse"
   >
-    <img [src]="actividad.imagen" width="50%" />
+    <img [src]="'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png'" width="50%" />
     <h3>{{ actividad.nombre }}</h3>
   </div>
 </div>

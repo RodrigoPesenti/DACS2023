@@ -34,6 +34,8 @@ feign:
         loggerLevel: basic
       msApiConectorClient:
         url: '${MS_CONECTOR_URL:http://localhost:9002}/conector'
+      msApiBackendClient:
+        url: '${MS_BACKEND_URL:http://localhost:9003}/backend'
        
 dacs:
   exceptions:

@@ -11,28 +11,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+import utn.dacs.ms.bff.dto.ActividadDto;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
 import utn.dacs.ms.bff.service.MsApiBackendService;
 import utn.dacs.ms.bff.service.MsApiConectorService;
 
 @RestController
-@RequestMapping("/conector")
+@RequestMapping("/backend")
 @Slf4j
-public class MsBffController {
+public class MsBackendController {
 
     @Autowired
-    private MsApiConectorService apiConectorService;
-    
+    private MsApiBackendService apiBackendService;
+
     @GetMapping("/ping")
     public String ping() {
-        return apiConectorService.ping();
+        return apiBackendService.ping();
     }
     
     @GetMapping("/version")
     public BuildInfoDTO getPropuestas() {
-        return apiConectorService.version();
+        return apiBackendService.version();
     }
+
     
+    @GetMapping("usuario/nombre/{nombreUsuario}/preferencias")
+    public ResponseEntity<List<ActividadDto>> getPreferenciasByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) {
+    	return apiBackendService.getPreferenciasByNombre(nombreUsuario);
+    }
     /*
     @GetMapping("/reason")
     public List<ReasonDTO> getMotivos() {
