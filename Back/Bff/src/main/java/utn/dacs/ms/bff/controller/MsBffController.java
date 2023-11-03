@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
-import utn.dacs.ms.bff.service.MsApiBackendService;
+import utn.dacs.ms.bff.service.UsuarioService;
 import utn.dacs.ms.bff.service.MsApiConectorService;
 
 @RestController

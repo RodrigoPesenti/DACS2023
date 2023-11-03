@@ -13,28 +13,14 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-
-	//@Bean
-	//public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-	//	http.cors().and().csrf().disable()
-	//			.authorizeRequests(authorize -> authorize
-	//					.anyRequest().permitAll()
-	//			);
-    //
-	//	return http.build();
-	//}
-	
 	@Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(request -> {
-            CorsConfiguration cors = new CorsConfiguration();
-            cors.setAllowedOrigins(List.of("http://localhost:4200"));
-            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-            cors.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-            return cors;
-        });
-
-        return http.build();
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.cors().and().csrf().disable()
+				.authorizeRequests(authorize -> authorize
+						.anyRequest().permitAll()
+				);
+    
+		return http.build();
 	}
-
+	
 }

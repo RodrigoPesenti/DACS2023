@@ -14,26 +14,23 @@ import lombok.extern.slf4j.Slf4j;
 import utn.dacs.ms.bff.dto.ActividadDto;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
 import utn.dacs.ms.bff.dto.UsuarioDto;
-import utn.dacs.ms.bff.service.UsuarioService;
+import utn.dacs.ms.bff.service.ActividadService;
 import utn.dacs.ms.bff.service.MsApiConectorService;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/actividad")
 @Slf4j
-public class UsuarioController {
+public class ActividadController {
 
     @Autowired
-    private UsuarioService UsuarioService;
+    private ActividadService ActividadService;
 
-    @GetMapping("/nombre/{nombreUsuario}/preferencias")
-    public ResponseEntity<List<ActividadDto>> getPreferenciasByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) {
-    	return UsuarioService.getPreferenciasByNombre(nombreUsuario);
+    @GetMapping("")
+    public ResponseEntity<List<ActividadDto>> getActividades(){
+    	return ActividadService.getActividades();
     }
     
-    @GetMapping("/nombre/{nombreUsuario}")
-	public ResponseEntity<UsuarioDto> getByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) {
-    	return UsuarioService.getByNombre(nombreUsuario);
-    };
+    
     
     /*
     @GetMapping("/reason")

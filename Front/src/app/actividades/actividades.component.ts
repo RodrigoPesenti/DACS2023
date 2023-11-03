@@ -13,6 +13,7 @@ export class ActividadesComponent implements OnInit {
 public isLogueado = false;
 public perfilUsuario: KeycloakProfile | null = null;
 public preferenciasResponse : IPreferencia[]  | null = null;
+public actividadesResponse: IPreferencia[] | null = null;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
 private ubicacion:string = "Concepción+del+Uruguay"
@@ -49,8 +50,6 @@ sonidoCard() {
         console.log("Pref: ", this.preferenciasResponse)
       });
     }
-
-    
   }
 
   buscarEnMapa(nombreActividad:string): void {

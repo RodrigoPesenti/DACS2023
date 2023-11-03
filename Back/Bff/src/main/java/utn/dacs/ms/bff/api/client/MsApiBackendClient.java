@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import utn.dacs.ms.bff.dto.UsuarioDto;
 import utn.dacs.ms.bff.dto.ActividadDto;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
 
@@ -24,7 +25,13 @@ public interface MsApiBackendClient {
     @GetMapping("/version")
     BuildInfoDTO version();
     
-    @GetMapping("/nombre/{nombreUsuario}/preferencias")
+    @GetMapping("/usuario/nombre/{nombreUsuario}/preferencias")
     ResponseEntity<List<ActividadDto>> getPreferenciasByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario);
+    
+    @GetMapping("/usuario/nombre/{nombreUsuario}")
+	public ResponseEntity<UsuarioDto> getByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario);
+    
+    @GetMapping("/actividad")
+    public ResponseEntity<List<ActividadDto>> getActividades();
     
 }

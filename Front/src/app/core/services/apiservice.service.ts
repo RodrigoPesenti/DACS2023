@@ -29,7 +29,7 @@ export class ApiService {
     }
 
     getUsuarioBD(nombreUsuario: string) {
-        const url = `http://localhost:9003/backend/usuario/nombre/${nombreUsuario}`;
+        const url = `http://localhost:9001/bff/usuario/nombre/${nombreUsuario}`;
         return this.http
           .get<IUsuario>(url, this.headers)
           .pipe(
@@ -57,9 +57,19 @@ export class ApiService {
             .post<IUsuario>(url, body, this.headers)
             .pipe();
     }
+    
+    getActividades() {
+      const url = `http://localhost:9001/bff/actividad`;
+      return this.http
+          .get<IPreferencia[]>(url, this.headers)
+          .pipe();
+    }
+
+    //DeleteUsuarioActividades(nombreUsuario: string, listPreferencias: IPreferencias[])
+    //postUsuarioActividades(nombreUsuario: string, listPreferencias: IPreferencias[])
 
     getPreferenciasUsuario(nombreUsuario: string){
-        const url =`http://localhost:9003/backend/usuario/nombre/${nombreUsuario}/preferencias`;
+        const url =`http://localhost:9001/bff/usuario/nombre/${nombreUsuario}/preferencias`;
         return this.http
             .get<IPreferencia[]>(url, this.headers)
             .pipe(

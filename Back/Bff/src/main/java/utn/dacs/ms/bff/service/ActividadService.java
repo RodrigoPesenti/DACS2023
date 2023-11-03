@@ -19,7 +19,7 @@ import utn.dacs.ms.bff.exceptions.ErrorEnum;
 
 @Service
 @Slf4j
-public class UsuarioService {
+public class ActividadService {
 
 	@Autowired
     private MsApiBackendClient msApiBackendClient;
@@ -42,24 +42,15 @@ public class UsuarioService {
         }
     }    
     
-    public ResponseEntity<List<ActividadDto>> getPreferenciasByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) {
+    public ResponseEntity<List<ActividadDto>> getActividades(){
     	try {
-            return this.msApiBackendClient.getPreferenciasByNombre(nombreUsuario);
+            return this.msApiBackendClient.getActividades();
         } catch (Exception e) {
-            log.error("Error producido al solicitar un recurso a /backend/usuario/nombre/{nombreUsuario}/preferencias", e);
+            log.error("Error producido al solicitar un recurso a /backend/actividad", e);
             throw new BffException(ErrorEnum.ERROR_API);
         }
     };
-    
-    
-	public ResponseEntity<UsuarioDto> getByNombre(@PathVariable(value = "nombreUsuario") String nombreUsuario) {
-		try {
-            return this.msApiBackendClient.getByNombre(nombreUsuario);
-        } catch (Exception e) {
-            log.error("Error producido al solicitar un recurso a /backend/usuario/nombre/{nombreUsuario}/preferencias", e);
-            throw new BffException(ErrorEnum.ERROR_API);
-        }
-	};
+   
 
   
     
