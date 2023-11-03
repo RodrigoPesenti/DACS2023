@@ -26,7 +26,7 @@ export class NavBarComponent {
   }
 
   toggleModal() {
-    const modal: any = document.querySelector('.modal');
-    modal.style.display = 'block';
+    const modal: any = document.querySelector('.modal'); 
+    modal.style.display = 'block'; 
   }
 }

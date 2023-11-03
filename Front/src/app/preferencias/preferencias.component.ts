@@ -10,9 +10,9 @@ export class PreferenciasComponent {
   pesca=false
 
   activities = [
-    { name: 'Actividad 1', selected: false },
-    { name: 'Actividad 2', selected: false },
-    { name: 'Actividad 3', selected: false }
+    { name: 'Correr', selected: false },
+    { name: 'Pesca', selected: false },
+    { name: 'Senderismo', selected: false }
   ];
 
   saveActivities() {
