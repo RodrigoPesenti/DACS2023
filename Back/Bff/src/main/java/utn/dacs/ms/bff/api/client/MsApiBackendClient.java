@@ -6,10 +6,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import utn.dacs.ms.bff.dto.UsuarioDto;
 import utn.dacs.ms.bff.dto.ActividadDto;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
+import utn.dacs.ms.bff.dto.UsuarioActividadDto;
 
 
 @FeignClient(
@@ -33,5 +35,8 @@ public interface MsApiBackendClient {
     
     @GetMapping("/actividad")
     public ResponseEntity<List<ActividadDto>> getActividades();
+
+    @PostMapping("/usuario/usuarioActividad/{usuarioNombre}/{actividadNombre}")
+	ResponseEntity<UsuarioActividadDto> create(String usuarioNombre);
     
 }

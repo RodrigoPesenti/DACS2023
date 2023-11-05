@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import utn.dacs.ms.backend.model.entity.Actividad;
+import utn.dacs.ms.backend.model.entity.Usuario;
 import utn.dacs.ms.backend.model.repository.ActividadRepository;
 
 @Service
@@ -21,6 +22,12 @@ public class ActividadServiceImpl implements ActividadService {
 		return actividadRepository.findById(id);
 	}
 
+	@Override
+	public Optional<Actividad> getByNombre(String nombre) {
+        return actividadRepository.getByNombre(nombre);
+    }
+		
+	
 	@Override
 	public List<Actividad> getAll() {
 		return actividadRepository.findAll();

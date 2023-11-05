@@ -13,6 +13,7 @@ import utn.dacs.ms.bff.dto.ActividadDto;
 import utn.dacs.ms.bff.api.client.MsApiBackendClient;
 import utn.dacs.ms.bff.api.client.MsApiConectorClient;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
+import utn.dacs.ms.bff.dto.UsuarioActividadDto;
 import utn.dacs.ms.bff.dto.UsuarioDto;
 import utn.dacs.ms.bff.exceptions.BffException;
 import utn.dacs.ms.bff.exceptions.ErrorEnum;
@@ -57,6 +58,15 @@ public class UsuarioService {
             return this.msApiBackendClient.getByNombre(nombreUsuario);
         } catch (Exception e) {
             log.error("Error producido al solicitar un recurso a /backend/usuario/nombre/{nombreUsuario}/preferencias", e);
+            throw new BffException(ErrorEnum.ERROR_API);
+        }
+	}
+
+	public ResponseEntity<UsuarioActividadDto> create(String usuarioNombre) {
+		try {
+            return this.msApiBackendClient.create(usuarioNombre);
+        } catch (Exception e) {
+            log.error("Error producido al solicitar un recurso a create", e);
             throw new BffException(ErrorEnum.ERROR_API);
         }
 	};

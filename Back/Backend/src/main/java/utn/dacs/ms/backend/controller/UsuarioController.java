@@ -111,13 +111,13 @@ public class UsuarioController {
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
 	}
 	
-	@PostMapping("/{usuarioId}/{actividadId}")
+	@PostMapping("/usuarioActividad/{usuarioNombre}/{actividadNombre}")
 	public ResponseEntity<UsuarioActividadDto> create(
-	        @PathVariable(value = "usuarioId") Long usuarioId,
-	        @PathVariable(value = "actividadId") Long actividadId) throws ResourceNotFoundException {
+	        @PathVariable(value = "usuarioNombre") String usuarioNombre,
+	        @PathVariable(value = "actividadNombre") String actividadNombre) throws ResourceNotFoundException {
 
-	    Optional<Usuario> usuarioOptional = usuarioService.getById(usuarioId);
-	    Optional<Actividad> actividadOptional = actividadService.getById(actividadId);
+	    Optional<Usuario> usuarioOptional = usuarioService.getByNombre(usuarioNombre);
+	    Optional<Actividad> actividadOptional = actividadService.getByNombre(actividadNombre);
 
 	    if (usuarioOptional.isEmpty() || actividadOptional.isEmpty()) {
 	        throw new ResourceNotFoundException("Usuario or Actividad not found");
