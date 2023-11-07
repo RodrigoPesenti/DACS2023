@@ -44,6 +44,12 @@ sonidoCard() {
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
     }
+    else {
+      this.apiService.getActividades().subscribe(resp => {
+        this.preferenciasResponse = resp;
+        console.log("Pref: ", this.preferenciasResponse)
+      });
+    }
     if (this.perfilUsuario && this.perfilUsuario.username) {
       this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(resp => {
         this.preferenciasResponse = resp;

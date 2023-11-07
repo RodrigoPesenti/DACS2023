@@ -39,6 +39,7 @@ public class SecurityConfig {
 						.antMatchers("/metrics", "/metrics/**").permitAll()
 						.antMatchers("/ping","/conector/ping").permitAll()
 						.antMatchers("/version","/conector/version").permitAll()
+						.antMatchers("/actividad","/bff/actividad").permitAll()
 						.anyRequest().authenticated()
 				).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()

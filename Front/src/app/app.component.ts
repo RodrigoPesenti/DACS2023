@@ -33,12 +33,12 @@ export class AppComponent implements OnInit {
 
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
-
+      console.log("perfilKey", this.perfilUsuario)
       if (this.perfilUsuario && this.perfilUsuario.username){
         this.apiService.getUsuarioBD(this.perfilUsuario.username).subscribe(resp => 
           {
             this.usuarioResponse = resp; 
-
+            console.log("Usuario:", this.usuarioResponse)
             if (this.usuarioResponse === null && this.perfilUsuario && this.perfilUsuario.username) {
               console.log("Usuario no en BD")
               this.apiService.postUsuarioDB(this.perfilUsuario.username).subscribe(resp => {

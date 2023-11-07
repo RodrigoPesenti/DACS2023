@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.extern.slf4j.Slf4j;
 import utn.dacs.ms.bff.dto.ActividadDto;
@@ -57,10 +59,10 @@ public class UsuarioService {
 		try {
             return this.msApiBackendClient.getByNombre(nombreUsuario);
         } catch (Exception e) {
-            log.error("Error producido al solicitar un recurso a /backend/usuario/nombre/{nombreUsuario}/preferencias", e);
+            log.error("Error producido al solicitar un recurso a /backend/usuario/nombre/{nombreUsuario}", e);
             throw new BffException(ErrorEnum.ERROR_API);
         }
-	}
+	};
 
 	public ResponseEntity<UsuarioActividadDto> create(String usuarioNombre) {
 		try {
@@ -71,7 +73,15 @@ public class UsuarioService {
         }
 	};
 
-  
+	
+	public ResponseEntity<UsuarioDto> create(@RequestBody UsuarioDto usuarioDto) {
+		try {
+            return this.msApiBackendClient.create(usuarioDto);
+        } catch (Exception e) {
+            log.error("Error producido al solicitar un recurso a create", e);
+            throw new BffException(ErrorEnum.ERROR_API);
+        }
+	}
     
 
  

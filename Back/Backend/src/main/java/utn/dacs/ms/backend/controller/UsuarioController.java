@@ -68,7 +68,7 @@ public class UsuarioController {
 		Optional<Usuario> usuario = usuarioService.getByNombre(nombreUsuario);
 
 		if (usuario.isEmpty()) {
-			throw new ResourceNotFoundException("");
+			return null;
 		}
 		UsuarioDto data = modelMapper.map(usuario.get(), UsuarioDto.class);
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
