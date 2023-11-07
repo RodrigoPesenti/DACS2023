@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import utn.dacs.ms.conector.api.client.ApiClient;
-import utn.dacs.ms.conector.dto.ItemDto;
+import utn.dacs.ms.conector.dto.WeatherDTO;
 import utn.dacs.ms.conector.exceptions.BffException;
 import utn.dacs.ms.conector.exceptions.ErrorEnum;
 
@@ -19,7 +19,7 @@ public class ApiService {
     private ApiClient apiClient;
 	
 	
-    public List<ItemDto> todos() {
+    public List<WeatherDTO> todos() {
         try {
             return this.apiClient.todos();
         } catch (Exception e) {

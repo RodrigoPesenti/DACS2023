@@ -65,3 +65,7 @@
 [07/Nov/2023:16:47:27 -0300] 127.0.0.1 "GET /backend/actividad HTTP/1.1" 200 (111 ms)
 [07/Nov/2023:16:53:32 -0300] 127.0.0.1 "GET /backend/actividad HTTP/1.1" 200 (171 ms)
 [07/Nov/2023:16:53:32 -0300] 127.0.0.1 "GET /backend/actividad HTTP/1.1" 200 (116 ms)
+[07/Nov/2023:16:58:26 -0300] 127.0.0.1 "GET /backend/usuario/nombre/rodrigo HTTP/1.1" 200 (114 ms)
+[07/Nov/2023:16:58:26 -0300] 127.0.0.1 "GET /backend/usuario/nombre/rodrigo/preferencias HTTP/1.1" 200 (158 ms)
+[07/Nov/2023:16:58:26 -0300] 127.0.0.1 "GET /backend/usuario/nombre/rodrigo/preferencias HTTP/1.1" 200 (116 ms)
+[07/Nov/2023:17:10:08 -0300] 127.0.0.1 "GET /backend/actividad HTTP/1.1" 200 (169 ms)

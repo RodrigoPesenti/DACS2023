@@ -30,7 +30,7 @@ feign:
         readTimeout: 60000
         loggerLevel: basic
       apiClient:
-        url: '${API_URL:https://jsonplaceholder.typicode.com}'
+        url: '${API_URL:https://api.open-meteo.com/v1/forecast?latitude=-32.4846&longitude=-58.2322&current=temperature_2m,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m&forecast_days=3}'
        
 dacs:
   exceptions:

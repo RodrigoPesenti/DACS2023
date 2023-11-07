@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface ApiClient {
 
     @GetMapping("/todos")
-    <ItemDto> List<ItemDto> todos();
+    <WeatherDTO> List<WeatherDTO> todos();
     
     
 }

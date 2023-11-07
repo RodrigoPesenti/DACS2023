@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import utn.dacs.ms.conector.configuration.ApplicationContextProvider;
-import utn.dacs.ms.conector.dto.ItemDto;
+import utn.dacs.ms.conector.dto.WeatherDTO;
 import utn.dacs.ms.conector.service.ApiService;
 
 @RestController
@@ -35,7 +35,7 @@ public class HomeController {
     }
 	
     @GetMapping("/todos")
-    public List<ItemDto> todos() {
+    public List<WeatherDTO> todos() {
         return apiService.todos();
     }
 
