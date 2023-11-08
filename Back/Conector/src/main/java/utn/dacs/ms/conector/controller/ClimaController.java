@@ -13,26 +13,15 @@ import utn.dacs.ms.conector.dto.WeatherDTO;
 import utn.dacs.ms.conector.service.ApiService;
 
 @RestController
-@RequestMapping(value = "/")
-public class HomeController {
+@RequestMapping(value = "/clima")
+public class ClimaController {
 	
     @Autowired
     private ApiService apiService;
 	
-	
-	@GetMapping(value = "/ping")
-    public Object ping() {
-        return "Hello from DACS MS CONECTOR ping";
-    }
-
-	@GetMapping(value = "/hola")
-    public Object hola() {
-        return "hola o/";
-    }
-	
-	@GetMapping(value = "/version")
-    public Object version() {
-        return ApplicationContextProvider.getApplicationContext().getBean("buildInfo");
+    @GetMapping("/{pLatitude}/{pLongitude}")
+    public WeatherDTO clima(@PathVariable(value = "pLatitude") double pLatitude, @PathVariable(value = "pLongitude") double pLongitude) {
+        return apiService.clima(pLatitude,pLongitude);
     }
 
 }
