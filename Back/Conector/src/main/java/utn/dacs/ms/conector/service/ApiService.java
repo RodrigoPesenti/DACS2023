@@ -19,9 +19,9 @@ public class ApiService {
     private ApiClient apiClient;
 	
 	
-    public List<WeatherDTO> todos() {
+    public WeatherDTO clima() {
         try {
-            return this.apiClient.todos();
+            return this.apiClient.clima();
         } catch (Exception e) {
            log.error("Error producido al solicitar un recurso a /todos", e);
             throw new BffException(ErrorEnum.ERROR_API);

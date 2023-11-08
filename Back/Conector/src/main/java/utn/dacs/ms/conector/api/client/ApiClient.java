@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import utn.dacs.ms.conector.dto.WeatherDTO;
+
 
 @FeignClient(
 			name = "apiClient", 
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public interface ApiClient {
 
-    @GetMapping("/todos")
-    <WeatherDTO> List<WeatherDTO> todos();
+    @GetMapping("")
+    WeatherDTO clima();
     
     
 }

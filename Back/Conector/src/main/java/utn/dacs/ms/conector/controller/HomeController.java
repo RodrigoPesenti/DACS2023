@@ -34,9 +34,9 @@ public class HomeController {
         return ApplicationContextProvider.getApplicationContext().getBean("buildInfo");
     }
 	
-    @GetMapping("/todos")
-    public List<WeatherDTO> todos() {
-        return apiService.todos();
+    @GetMapping("/clima")
+    public WeatherDTO clima() {
+        return apiService.clima();
     }
 
 }
