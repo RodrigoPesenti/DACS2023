@@ -10,7 +10,7 @@ import { throwError, of } from 'rxjs';
 
 
 
-import { IResponse, IClimaResponse, IVersionResponse, IPreferencia, IUsuario } from '../models/response.interface';
+import { IResponse, IClimaResponse, IVersionResponse, IPreferencia, IUsuario, IUsuarioActividad } from '../models/response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -34,18 +34,6 @@ export class ApiService {
           .get<IUsuario>(url, this.headers)
           .pipe();
       }
-       
-    postUsuarioDB(nombreUsuario: string) {
-        const url = `http://localhost:9001/bff/usuario`;
-
-        const body = {
-            nombre: nombreUsuario
-        };
-
-        return this.http
-            .post<IUsuario>(url, body, this.headers)
-            .pipe();
-    }
     
     getActividades() {
       const url = `http://localhost:9001/bff/actividad`;
@@ -94,6 +82,26 @@ export class ApiService {
     postTest(param: IRequestTest) { 
         const url = `${environment.backendForFrontendUrl}/test`;
         return this.http.post<any[]>(url, param, this.headers);
+    }
+
+    postUsuarioDB(nombreUsuario: string) {
+        const url = `http://localhost:9001/bff/usuario`;
+
+        const body = {
+            nombre: nombreUsuario
+        };
+
+        return this.http
+            .post<IUsuario>(url, body, this.headers)
+            .pipe();
+    }
+
+    postUsuarioActividad(nombreUsuario: string, nombreActividad: string) {
+        const url = `http://localhost:9001/bff/usuario/usuarioActividad/${nombreUsuario}/${nombreActividad}`;
+
+        return this.http
+            .post<IUsuarioActividad>(url, this.headers)
+            .pipe();
     }
 
     get headers() {

@@ -27,6 +27,12 @@ export interface IResponse
         precipitacionmax: number;
     }
 
+    export interface IUsuarioActividad {
+        id: number;
+        usuario: IUsuario;
+        actividad: IPreferencia
+    }
+
     export interface IClimaResponse
     {
         clima: string;
