@@ -145,6 +145,7 @@ public class UsuarioController {
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
 	}
 
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> delete(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
 
