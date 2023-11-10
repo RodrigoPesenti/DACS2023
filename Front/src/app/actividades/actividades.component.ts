@@ -70,13 +70,13 @@ sonidoCard() {
   esFactible( valoresAceptables: IPreferencia): Observable<boolean> {
     
   
-    return this.apiService.getClima().pipe(
+    return this.apiService.getClima(-144,33).pipe(
       map((climaResponse) => {
         if (
           climaResponse.daily.temperature_2m_min[0] >= valoresAceptables.tempmin &&
           climaResponse.daily.temperature_2m_max[0] <= valoresAceptables.tempmax &&
-          climaResponse.daily.precipitation_sum[0] >= valoresAceptables.precipitacionmin &&
-          climaResponse.daily.precipitation_sum[0] <= valoresAceptables.precipitacionmax &&
+          climaResponse.daily.precipitation_probability_max[0] >= valoresAceptables.precipitacionmin &&
+          climaResponse.daily.precipitation_probability_max[0] <= valoresAceptables.precipitacionmax &&
           climaResponse.daily.wind_speed_10m_max[0] >= valoresAceptables.vientomin &&
           climaResponse.daily.wind_speed_10m_max[0] <= valoresAceptables.vientomax
         ) {

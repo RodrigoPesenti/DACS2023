@@ -17,7 +17,7 @@ public class WeatherDTO {
         private String[] time;
         private double[] temperature_2m_max;
         private double[] temperature_2m_min;
-        private double[] precipitation_sum;
+        private double[] precipitation_probability_max;
         private double[] wind_speed_10m_max;
 
     }
