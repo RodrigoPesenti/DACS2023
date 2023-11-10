@@ -16,7 +16,16 @@ export class InicioComponent implements OnInit {
 
   public async ngOnInit() {
     this.obtenerImagenClima()
-    this.apiService.getClima().subscribe(resp => {this.climaResponse= resp});
+    this.apiService.getClima().subscribe(resp => {this.climaResponse= resp;
+  
+      console.log("Fecha: ", this.climaResponse.daily.time[0]);
+      console.log("Temperatura Máxima: ", this.climaResponse.daily.temperature_2m_max[0]);
+      console.log("Temperatura Minima: ", this.climaResponse.daily.temperature_2m_min[0]);
+      console.log("Precipitación: ", this.climaResponse.daily.precipitation_sum[0]);
+      console.log("Velocidad del Viento: ", this.climaResponse.daily.wind_speed_10m_max[0]);
+    }
+      );
+    
   }
   
 

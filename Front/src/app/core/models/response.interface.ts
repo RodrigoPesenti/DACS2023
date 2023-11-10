@@ -1,3 +1,5 @@
+import { Timestamp } from "rxjs";
+
 export interface IResponse
     {
         error : boolean ;
@@ -27,7 +29,12 @@ export interface IResponse
         precipitacionmax: number;
     }
 
-    export interface IClimaResponse
-    {
-        clima: string;
+    export interface IClimaResponse{       
+        daily:{
+            precipitation_sum: number[];
+            temperature_2m_max: number[];
+            temperature_2m_min: number[];
+            wind_speed_10m_max: number[];
+            time: string[]
+        }
     }

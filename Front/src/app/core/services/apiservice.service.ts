@@ -78,7 +78,7 @@ export class ApiService {
     }
 
     getClima(){
-        const url ='assets/json/clima.json';
+        const url ='http://localhost:9001/bff/clima/-32.48463/-58.23217';
         return this.http
             .get<IClimaResponse>(url, this.headers)
             .pipe();

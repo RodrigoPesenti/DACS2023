@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../core/services/apiservice.service';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
-import {IPreferencia} from '../core/models/response.interface';
+import {IPreferencia, IClimaResponse} from '../core/models/response.interface';
+import { Observable, map, forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-actividades',
@@ -14,6 +16,7 @@ public isLogueado = false;
 public perfilUsuario: KeycloakProfile | null = null;
 public preferenciasResponse : IPreferencia[]  | null = null;
 public actividadesResponse: IPreferencia[] | null = null;
+public climaResponse: IClimaResponse | null = null;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
 private ubicacion:string = "Concepción+del+Uruguay"
@@ -51,12 +54,59 @@ sonidoCard() {
       });
     }
     if (this.perfilUsuario && this.perfilUsuario.username) {
-      this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(resp => {
-        this.preferenciasResponse = resp;
+      this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(preferencias => {
+        this.preferenciasResponse = preferencias;
         console.log("Pref: ", this.preferenciasResponse)
+
+        const actividadesFactibles = this.analizarActividades(preferencias);
+        console.log("Actividades factibles: ", actividadesFactibles);
       });
     }
   }
+
+
+
+
+  esFactible( valoresAceptables: IPreferencia): Observable<boolean> {
+    
+  
+    return this.apiService.getClima().pipe(
+      map((climaResponse) => {
+        if (
+          climaResponse.daily.temperature_2m_min[0] >= valoresAceptables.tempmin &&
+          climaResponse.daily.temperature_2m_max[0] <= valoresAceptables.tempmax &&
+          climaResponse.daily.precipitation_sum[0] >= valoresAceptables.precipitacionmin &&
+          climaResponse.daily.precipitation_sum[0] <= valoresAceptables.precipitacionmax &&
+          climaResponse.daily.wind_speed_10m_max[0] >= valoresAceptables.vientomin &&
+          climaResponse.daily.wind_speed_10m_max[0] <= valoresAceptables.vientomax
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
+  }
+
+  analizarActividades(actividades: IPreferencia[]) {
+    const actividadesFactibles: IPreferencia[] = [];
+  
+    const observables = actividades.map(actividad => this.esFactible(actividad));
+  
+    forkJoin(observables).subscribe(resultados => {
+      resultados.forEach((resultado, index) => {
+        if (resultado) {
+          actividadesFactibles.push(actividades[index]);
+        }
+      });
+    });
+  
+    return actividadesFactibles;
+  }
+
+
+  
+
 
   buscarEnMapa(nombreActividad:string): void {
     location.href = '#mapa';
@@ -73,6 +123,8 @@ sonidoCard() {
       iframe.setAttribute('src', nuevoSrc);
     }
   }
+
+
 
 }
 
