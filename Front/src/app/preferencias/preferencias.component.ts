@@ -92,7 +92,15 @@ export class PreferenciasComponent {
       this.activitiesToDelete(this.activities, nombreUsuario).subscribe(
         ({ activitiesDelete, activitiesAdd }) => {
           console.log('Actividades a eliminar:', activitiesDelete);
+          activitiesDelete.forEach((activitie) => {
+            console.log("Actividad a eliminar: ", activitie)
+            this.apiService.deleteUsuarioActividad(nombreUsuario,activitie.name).subscribe(resp => console.log(resp))
+          })
           console.log('Actividades a agregar:', activitiesAdd);
+          activitiesAdd.forEach((activitie) => {
+            console.log("Actividad a agregar: ", activitie)
+            this.apiService.postUsuarioActividad(nombreUsuario,activitie.name).subscribe(resp => console.log(resp))
+          })
         },
         (error) => {
           console.error('Error al obtener actividades a eliminar:', error);

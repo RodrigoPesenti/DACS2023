@@ -64,9 +64,9 @@ public class UsuarioService {
         }
 	};
 
-	public ResponseEntity<UsuarioActividadDto> create(String usuarioNombre) {
+	public ResponseEntity<UsuarioActividadDto> create(String usuarioNombre, String actividadNombre) {
 		try {
-            return this.msApiBackendClient.create(usuarioNombre);
+            return this.msApiBackendClient.create(usuarioNombre, actividadNombre);
         } catch (Exception e) {
             log.error("Error producido al solicitar un recurso a create", e);
             throw new BffException(ErrorEnum.ERROR_API);
@@ -83,6 +83,13 @@ public class UsuarioService {
         }
 	}
     
-
+	public ResponseEntity<String> delete( @PathVariable(value = "usuarioNombre") String usuarioNombre, @PathVariable(value = "actividadNombre") String actividadNombre){
+		try {
+            return this.msApiBackendClient.delete(usuarioNombre, actividadNombre);
+        } catch (Exception e) {
+            log.error("Error producido al solicitar un recurso a create", e);
+            throw new BffException(ErrorEnum.ERROR_API);
+        }
+	};
  
 }

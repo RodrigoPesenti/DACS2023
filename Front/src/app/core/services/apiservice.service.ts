@@ -104,6 +104,14 @@ export class ApiService {
             .pipe();
     }
 
+    deleteUsuarioActividad(nombreUsuario: string, nombreActividad: string){
+        const url =  `http://localhost:9001/bff/usuario/usuarioActividad/${nombreUsuario}/${nombreActividad}`;
+
+        return this.http
+            .delete<string>(url, this.headers)
+            .pipe();
+    }
+
     get headers() {
         return {
             headers: {

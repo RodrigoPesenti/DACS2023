@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import utn.dacs.ms.backend.model.entity.Actividad;
 import utn.dacs.ms.backend.model.entity.Usuario;
 import utn.dacs.ms.backend.model.entity.UsuarioActividad;
 import utn.dacs.ms.backend.model.repository.UsuarioActividadRepository;
@@ -22,6 +23,10 @@ public class UsuarioActividadServiceImpl implements UsuarioActividadService {
 		return usuarioActividadRepository.findById(id);
 	}
 
+	public Optional<UsuarioActividad> getByUsuarioAndActividad(Usuario usuario, Actividad actividad) {
+		return usuarioActividadRepository.findByUsuarioAndActividad(usuario,actividad);
+	};
+	
 	@Override
 	public List<UsuarioActividad> getAll() {
 		return usuarioActividadRepository.findAll();
@@ -30,10 +35,15 @@ public class UsuarioActividadServiceImpl implements UsuarioActividadService {
 	
 	@Override
 	public void delete(Long id) {
-		Optional<UsuarioActividad> usuario = getById(id);
-		usuarioActividadRepository.delete(usuario.get());
+		Optional<UsuarioActividad> usuarioActividad = getById(id);
+		usuarioActividadRepository.delete(usuarioActividad.get());
 	}
 
+	public void deleteByUsuarioActividad(UsuarioActividad usuarioActividad){
+		Optional<UsuarioActividad> usuarioActividadOpcional = getByUsuarioAndActividad(usuarioActividad.getUsuario(), usuarioActividad.getActividad());
+		usuarioActividadRepository.delete(usuarioActividadOpcional.get());
+	};
+	
 	@Override
 	public UsuarioActividad save(UsuarioActividad entity) {
 		return usuarioActividadRepository.save(entity);

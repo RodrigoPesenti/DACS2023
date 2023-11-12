@@ -144,6 +144,34 @@ public class UsuarioController {
 		UsuarioDto data = modelMapper.map(usuarioService.save(usuario), UsuarioDto.class);
 		return new ResponseEntity<UsuarioDto>(data, HttpStatus.OK);
 	}
+	
+	@DeleteMapping("/usuarioActividad/{usuarioNombre}/{actividadNombre}")
+	public ResponseEntity<String> delete(
+	        @PathVariable(value = "usuarioNombre") String usuarioNombre,
+	        @PathVariable(value = "actividadNombre") String actividadNombre) throws ResourceNotFoundException {
+
+	    Optional<Usuario> usuarioOptional = usuarioService.getByNombre(usuarioNombre);
+	    Optional<Actividad> actividadOptional = actividadService.getByNombre(actividadNombre);
+
+	    if (usuarioOptional.isEmpty() || actividadOptional.isEmpty()) {
+	        throw new ResourceNotFoundException("Usuario or Actividad not found");
+	    }
+
+	    Usuario usuario = usuarioOptional.get();
+	    Actividad actividad = actividadOptional.get();
+
+	    // Buscar el UsuarioActividad que coincida con el usuario y la actividad
+	    Optional<UsuarioActividad> usuarioActividadOptional = usuarioActividadService.getByUsuarioAndActividad(usuario, actividad);
+
+	    if (usuarioActividadOptional.isEmpty()) {
+	        throw new ResourceNotFoundException("UsuarioActividad not found");
+	    }
+
+	    // Eliminar el UsuarioActividad
+	    usuarioActividadService.deleteByUsuarioActividad(usuarioActividadOptional.get());
+
+	    return new ResponseEntity<>("UsuarioActividad deleted successfully", HttpStatus.OK);
+	}
 
 	
 	@DeleteMapping("/{id}")
