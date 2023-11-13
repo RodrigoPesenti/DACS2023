@@ -29,8 +29,6 @@ sonidoCard() {
         sonido.play();
 }
 
-  
-
    actividades = [
        {nombre: 'Pesca', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
        {nombre: 'Senderismo', imagen: 'https://media-public.canva.com/mQYyw/MAEWSDmQYyw/1/tl.png' }, 
