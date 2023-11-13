@@ -37,7 +37,8 @@ sonidoCard() {
        {nombre: 'Correr', imagen: 'https://media-public.canva.com/nhCaI/MAEcNYnhCaI/1/tl.png' } ,
        {nombre: 'Golf', imagen: 'https://media-public.canva.com/17QDU/MAEpaH17QDU/1/tl.png'},
        {nombre: 'Camping', imagen: 'https://media-public.canva.com/l3pQo/MAEZBml3pQo/1/tl.png'},
-      {nombre: 'Futbol', imagen: 'https://media-public.canva.com/IpIqA/MAEiSZIpIqA/1/tl.png'}
+       {nombre: 'Futbol', imagen: 'https://media-public.canva.com/IpIqA/MAEiSZIpIqA/1/tl.png'},
+       {nombre: 'Actividades hogareñas', imagen: 'https://media-public.canva.com/ZnY-s/MAFfV3ZnY-s/1/tl.png'}
      ];
 
   async ngOnInit() {
@@ -64,8 +65,11 @@ sonidoCard() {
     }
   }
 
-
-
+  getImagenActividad(nombreActividad: string): string {
+    const actividadEncontrada = this.actividades.find(actividad => actividad.nombre === nombreActividad);
+    return actividadEncontrada ? actividadEncontrada.imagen : ''; //Return ternario (Si encuentra una url devuelve lo de la izquirda de los 2 puntos, si no lo de la derecha)
+  }
+  
 
   esFactible( valoresAceptables: IPreferencia): Observable<boolean> {
     
