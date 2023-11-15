@@ -18,6 +18,7 @@ public preferenciasResponse : IPreferencia[]  | null = null;
 public actividadesResponse: IPreferencia[] | null = null;
 public climaResponse: IClimaResponse | null = null;
 public actividadesFactibles : IPreferencia[]  | null = null;
+public prefEmpty : boolean = false;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
 private ubicacion:string = "Concepción+del+Uruguay"
@@ -54,25 +55,29 @@ sonidoCard() {
 
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
+      if (this.perfilUsuario && this.perfilUsuario.username) {
+        this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(preferencias => {;
+          if (preferencias.length == 0) {
+            this.prefEmpty = true;
+            this.apiService.getActividades().subscribe(preferencias => {
+              this.actividadesFactibles = this.analizarActividades(preferencias);
+            });
+          }
+          else{
+            this.actividadesFactibles = this.analizarActividades(preferencias);
+            console.log("Actividades factibles: ", this.actividadesFactibles);
+          }
+        });
+      }
     }
     else {
-      this.apiService.getActividades().subscribe(resp => {
-        this.preferenciasResponse = resp;
-        console.log("Pref: ", this.preferenciasResponse)
-      });
-    }
-    if (this.perfilUsuario && this.perfilUsuario.username) {
-      this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(preferencias => {
-        this.preferenciasResponse = preferencias;
-        console.log("Pref: ", this.preferenciasResponse)
-
+      this.apiService.getActividades().subscribe(preferencias => {
         this.actividadesFactibles = this.analizarActividades(preferencias);
-        console.log("Actividades factibles: ", this.actividadesFactibles);
-
-        
-
+        console.log("Actividades factibles: ", this.actividadesFactibles)
       });
     }
+    
+    
   }
 
   getImagenActividad(nombreActividad: string): string {
