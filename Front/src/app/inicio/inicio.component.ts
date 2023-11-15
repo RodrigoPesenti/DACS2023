@@ -12,9 +12,8 @@ import { map} from 'rxjs';
 export class InicioComponent implements OnInit {
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
 public climaActual : String = "";
-
-  climaImagenURL = ""
-  public climaResponse : IClimaResponse  | null = null;
+public climaImagenURL: String = "";
+public climaResponse : IClimaResponse  | null = null;
 
   constructor(private apiService: ApiService) {}
 
@@ -26,40 +25,41 @@ public climaActual : String = "";
           .subscribe({
             next: (climaResponse) => {
               this.climaActual = this.codigoClima(climaResponse.daily.weather_code[0]);
+              this.climaImagenURL = this.imagenClima(climaResponse.daily.weather_code[0]);
             },
             error: (error) => {
               console.error("Error al obtener el clima:", error);
             }
           });
-      }
+      }      
     });
-    this.obtenerImagenClima();
+    
   }
   
-  
+
   
   
   codigoClima(codigo: number): string {
     const weatherCases: Record<number, string> = {
         0: "Cielo limpio",
-        1: "Principalmente despejado, parcialmente nublado y cubierto",
-        2: "Principalmente despejado, parcialmente nublado y cubierto",
-        3: "Principalmente despejado, parcialmente nublado y cubierto",
-        45: "Niebla y depósito de niebla de escarcha",
-        48: "Niebla y depósito de niebla de escarcha",
-        51: "Llovizna de intensidad ligera",
-        53: "Llovizna de intensidad moderada",
-        55: "Llovizna de intensidad densa",
-        56: "Llovizna helada de intensidad ligera",
-        57: "Llovizna helada de intensidad densa",
-        61: "Lluvia de intensidad leve",
-        63: "Lluvia de intensidad moderada",
-        65: "Lluvia de intensidad fuerte",
-        66: "Lluvia helada de intensidad ligera",
-        67: "Lluvia helada de intensidad fuerte",
-        71: "Caída de nieve de intensidad leve",
-        73: "Caída de nieve de intensidad moderada",
-        75: "Caída de nieve de intensidad fuerte",
+        1: "Principalmente despejado",
+        2: "Parcialmente nublado",
+        3: "Cubierto",
+        45: "Niebla",
+        48: "Niebla espesa",
+        51: "Llovizna de ligera",
+        53: "Llovizna de moderada",
+        55: "Llovizna de densa",
+        56: "Llovizna helada ligera",
+        57: "Llovizna helada densa",
+        61: "Lluvia leve",
+        63: "Lluvia moderada",
+        65: "Lluvia fuerte",
+        66: "Lluvia helada ligera",
+        67: "Lluvia helada fuerte",
+        71: "Caída de nieve leve",
+        73: "Caída de nieve moderada",
+        75: "Caída de nieve fuerte",
         77: "Granos de nieve",
         80: "Lluvias leves",
         81: "Lluvias moderadas",
@@ -79,7 +79,7 @@ public climaActual : String = "";
       this.apiService.getClima(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude)
         .subscribe({
           next:(climaResponse) => {
-            this.climaActual = this.codigoClima(climaResponse.daily.weather_code[0]);                    
+            this.climaActual = this.codigoClima(climaResponse.daily.weather_code[0]);               
           },
           error:(error) => {
             console.error("Error al obtener el clima:", error);
@@ -91,11 +91,68 @@ public climaActual : String = "";
 
 
 
-  obtenerImagenClima() {
-    // Aquí debería implementarse la lógica para obtener la imagen del clima.
-    // Devuelve la URL de la imagen.
-    return this.climaImagenURL = "../../assets/images/Soleado.png";
-    console.log("HOLADENUEVO", this.climaActual)
-  }
+ imagenClima(codigo: number): string {
+    let resultado = "";
+
+    switch (codigo) {
+        //Sunny
+        case 0:
+        case 1:
+            resultado = "../../assets/images/Sunny.png";
+            break;
+        //Nublado    
+        case 2:
+        case 3:
+            resultado = "../../assets/images/cloudy.png";
+            break;
+        //Llovizna   
+        case 51:
+        case 53:
+        case 55:
+        case 61:
+        case 63:
+        case 80:
+        case 81:
+        case 95:
+            resultado = "../../assets/images/rainy.png";
+            break;
+        //Tormenta Fuerte   
+        case 65:
+        case 82:
+        case 99: 
+          resultado = "../../assets/images/heavy-rain.png";
+          break;
+        //Snow    
+        case 67:
+        case 71:          
+        case 73:
+        case 86:
+            resultado = "../../assets/images/snow.png";
+            break;  
+        //Full-snow    
+        case 75:
+        case 77:
+            resultado = "../../assets/images/Full-snow.png";
+            break;
+        //Llovizna-helada    
+        case 56:
+        case 57:          
+        case 66:
+        case 86:
+            resultado = "../../assets/images/Llovizna-helada.png";
+            break;   
+        //Mist    
+        case 45:
+        case 48:
+            resultado = "../../assets/images/mist.png";
+            break;              
+        default:
+            resultado = "../../assets/images/cloudy.png";
+            break;
+    }
+
+    return resultado;
+    
+}
 
 }
