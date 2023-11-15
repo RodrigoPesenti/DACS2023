@@ -6,9 +6,10 @@ import { IRequestTest } from '../models/request.interface';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { throwError, of } from 'rxjs';
 
-
-
-
+interface Coordinates {
+    latitude: number;
+    longitude: number;
+  }
 
 import { IResponse, IClimaResponse, IVersionResponse, IPreferencia, IUsuario, IUsuarioActividad } from '../models/response.interface';
 
@@ -71,6 +72,27 @@ export class ApiService {
             .get<IClimaResponse>(url, this.headers)
             .pipe();
     }
+
+    getLocation(): Promise<Coordinates> {
+        return new Promise((resolve, reject) => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const coordinates: Coordinates = {
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude
+                };
+                resolve(coordinates);
+              },
+              (error) => {
+                reject(error);
+              }
+            );
+          } else {
+            reject(new Error('Geolocation is not supported.'));
+          }
+        });
+      }
 
     getVersion() {
         const url ='assets/json/version.json';

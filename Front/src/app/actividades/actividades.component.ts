@@ -3,7 +3,7 @@ import { ApiService } from '../core/services/apiservice.service';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
 import {IPreferencia, IClimaResponse} from '../core/models/response.interface';
-import { Observable, map, forkJoin } from 'rxjs';
+import { Observable, map, forkJoin, of} from 'rxjs';
 
 
 @Component({
@@ -17,9 +17,11 @@ public perfilUsuario: KeycloakProfile | null = null;
 public preferenciasResponse : IPreferencia[]  | null = null;
 public actividadesResponse: IPreferencia[] | null = null;
 public climaResponse: IClimaResponse | null = null;
+public actividadesFactibles : IPreferencia[]  | null = null;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
 private ubicacion:string = "Concepción+del+Uruguay"
+private persistentCoordinates: { latitude: number, longitude: number } | null = null;
 
 constructor(private readonly keycloak: KeycloakService,private apiService: ApiService) {}
 
@@ -40,6 +42,13 @@ sonidoCard() {
      ];
 
   async ngOnInit() {
+    this.apiService.getLocation().then((coordinates) => {
+      console.log(`Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}`);
+      this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.longitude}
+    })
+    .catch((error) => {
+      console.error('Error getting location:', error);
+    });
     this.actualizarMapa(this.ubicacion);
     this.isLogueado = await this.keycloak.isLoggedIn();
 
@@ -57,8 +66,8 @@ sonidoCard() {
         this.preferenciasResponse = preferencias;
         console.log("Pref: ", this.preferenciasResponse)
 
-        const actividadesFactibles = this.analizarActividades(preferencias);
-        console.log("Actividades factibles: ", actividadesFactibles);
+        this.actividadesFactibles = this.analizarActividades(preferencias);
+        console.log("Actividades factibles: ", this.actividadesFactibles);
       });
     }
   }
@@ -68,26 +77,29 @@ sonidoCard() {
     return actividadEncontrada ? actividadEncontrada.imagen : ''; //Return ternario (Si encuentra una url devuelve lo de la izquirda de los 2 puntos, si no lo de la derecha)
   }
   
-
   esFactible( valoresAceptables: IPreferencia): Observable<boolean> {
+    if (this.persistentCoordinates) {
+      return this.apiService.getClima(this.persistentCoordinates.latitude,this.persistentCoordinates.longitude).pipe(
+        map((climaResponse) => {
+          if (
+            climaResponse.daily.temperature_2m_min[0] >= valoresAceptables.tempmin &&
+            climaResponse.daily.temperature_2m_max[0] <= valoresAceptables.tempmax &&
+            climaResponse.daily.precipitation_probability_max[0] >= valoresAceptables.precipitacionmin &&
+            climaResponse.daily.precipitation_probability_max[0] <= valoresAceptables.precipitacionmax &&
+            climaResponse.daily.wind_speed_10m_max[0] >= valoresAceptables.vientomin &&
+            climaResponse.daily.wind_speed_10m_max[0] <= valoresAceptables.vientomax
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+      );
+    }
+    else {
+      return of(false);
+    }
     
-  
-    return this.apiService.getClima(-144,33).pipe(
-      map((climaResponse) => {
-        if (
-          climaResponse.daily.temperature_2m_min[0] >= valoresAceptables.tempmin &&
-          climaResponse.daily.temperature_2m_max[0] <= valoresAceptables.tempmax &&
-          climaResponse.daily.precipitation_probability_max[0] >= valoresAceptables.precipitacionmin &&
-          climaResponse.daily.precipitation_probability_max[0] <= valoresAceptables.precipitacionmax &&
-          climaResponse.daily.wind_speed_10m_max[0] >= valoresAceptables.vientomin &&
-          climaResponse.daily.wind_speed_10m_max[0] <= valoresAceptables.vientomax
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-    );
   }
 
   analizarActividades(actividades: IPreferencia[]) {
@@ -106,10 +118,6 @@ sonidoCard() {
     return actividadesFactibles;
   }
 
-
-  
-
-
   buscarEnMapa(nombreActividad:string): void {
     location.href = '#mapa';
     let nuevaURL = nombreActividad + "," + this.ubicacion;
@@ -125,8 +133,6 @@ sonidoCard() {
       iframe.setAttribute('src', nuevoSrc);
     }
   }
-
-
 
 }
 
