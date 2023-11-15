@@ -15,6 +15,7 @@ public class WeatherDTO {
     @Setter
     public class Daily {
         private String[] time;
+        private int [] weather_code;
         private double[] temperature_2m_max;
         private double[] temperature_2m_min;
         private double[] precipitation_probability_max;
