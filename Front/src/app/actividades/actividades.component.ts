@@ -17,6 +17,7 @@ public perfilUsuario: KeycloakProfile | null = null;
 public preferenciasResponse : IPreferencia[]  | null = null;
 public actividadesResponse: IPreferencia[] | null = null;
 public climaResponse: IClimaResponse | null = null;
+public actividadesFactibles : IPreferencia[]  | null = null;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
 private ubicacion:string = "Concepción+del+Uruguay"
@@ -65,8 +66,8 @@ sonidoCard() {
         this.preferenciasResponse = preferencias;
         console.log("Pref: ", this.preferenciasResponse)
 
-        const actividadesFactibles = this.analizarActividades(preferencias);
-        console.log("Actividades factibles: ", actividadesFactibles);
+        this.actividadesFactibles = this.analizarActividades(preferencias);
+        console.log("Actividades factibles: ", this.actividadesFactibles);
       });
     }
   }
