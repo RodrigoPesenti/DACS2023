@@ -51,18 +51,6 @@ export class ApiService {
         return this.http
             .get<IPreferencia[]>(url, this.headers)
             .pipe(
-              switchMap((preferencias) => {
-                if (preferencias && preferencias.length > 0) {
-                  // La lista de preferencias no está vacía
-                  return of(preferencias);
-                } else {
-                  // La lista de preferencias está vacía
-                  const urlactividades = 'http://localhost:9001/bff/actividad';
-                  return this.http
-                    .get<IPreferencia[]>(urlactividades, this.headers)
-                    .pipe();
-                }
-              })
             );
     }
 
