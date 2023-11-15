@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
 import { ApiService } from './core/services/apiservice.service';
 import { IClimaResponse, IVersionResponse, IUsuario } from './core/models/response.interface';
+declare var google: any;
+
+
+interface  AutocompleteOptions {
+	placeIdOnly?:  boolean;
+	strictBounds?:  boolean;
+	types?:  string[];
+	type?:  string;
+	fields?:  string[];
+}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent implements OnInit {
+  @ViewChild('addresstext') addresstext:  ElementRef | undefined;
   title = 'dacs2023';
   public isLogueado = false;
   public versionResponse : IVersionResponse  | null = null;
@@ -17,6 +29,26 @@ export class AppComponent implements OnInit {
   public usuarioResponse: IUsuario | null = null
   public role = false;
   constructor(private readonly keycloak: KeycloakService,private apiService: ApiService) {}
+
+  ngAfterViewInit():  void {
+    this.getPlaceAutocomplete();
+  }
+
+  getPlaceAutocomplete() {
+    
+    if (this.addresstext && this.addresstext.nativeElement) {
+      const autocomplete  =  new  google.maps.places.Autocomplete(this.addresstext.nativeElement,
+      {
+        types: ['establishment', 'geocode'] 
+      });
+  
+      google.maps.event.addListener(autocomplete, 'place_changed', () => {
+        const place  =  autocomplete.getPlace();
+        console.log(place.geometry.location.lat());
+        console.log(place.geometry.location.lng());
+      });
+    }
+  }
 
   public async ngOnInit() {
 

@@ -28,7 +28,7 @@ export class PreferenciasComponent {
         (listaActividades)=>{
           this.apiService.getPreferenciasUsuario(nombreUsuario).subscribe(
             (listaPreferencias)=>{
-        
+              console.log("pref usuario: ", listaPreferencias)
               //Agrego a la lista con las actividades existentes
               listaActividades.forEach(
                 (actividad) => {
@@ -40,6 +40,7 @@ export class PreferenciasComponent {
                   }
                 }
               )
+              
             }
           )
         }
