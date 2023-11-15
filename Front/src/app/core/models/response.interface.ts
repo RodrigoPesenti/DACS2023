@@ -37,6 +37,7 @@ export interface IResponse
 
     export interface IClimaResponse{       
         daily:{
+            weather_code: number[];
             precipitation_probability_max: number[];
             temperature_2m_max: number[];
             temperature_2m_min: number[];

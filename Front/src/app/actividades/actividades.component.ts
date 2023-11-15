@@ -29,7 +29,7 @@ sonidoCard() {
         var sonido = new Audio('../../assets/sounds/CardSound.mp3');
         sonido.volume = 0.5;
         sonido.play();
-}
+      }
 
    actividades = [
        {nombre: 'Pesca', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
@@ -68,6 +68,9 @@ sonidoCard() {
 
         this.actividadesFactibles = this.analizarActividades(preferencias);
         console.log("Actividades factibles: ", this.actividadesFactibles);
+
+        
+
       });
     }
   }

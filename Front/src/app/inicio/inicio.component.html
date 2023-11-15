@@ -5,12 +5,10 @@
     </div>
 
     <div class="text-center">
-        <ng-container *ngIf="climaResponse">
-           <!-- 
-            ACOMODAR EN BASE A LOS NOMBRES QUE ESTABLECIMOS!!
-            
-            <h1 class="text-white display-1">El clima esta&nbsp;{{ climaResponse.clima }}</h1>-->
-        </ng-container>    
+        <ng-container *ngIf="climaActual !== ''">
+            <h1 class="text-white display-1">Clima actual: {{ climaActual }}</h1>
+         </ng-container>
+          
     </div>
 
     <div class="gap-custom">
