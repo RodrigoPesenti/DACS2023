@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
-import { Observable, map } from 'rxjs';
+import { Observable, finalize, forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-preferencias',
@@ -58,7 +58,7 @@ export class PreferenciasComponent {
 
   closeModal() {
     const modal: any = document.querySelector('.modal'); 
-      modal.style.display = 'none';   
+      modal.style.display = 'none';  
   }
 
   activitiesToDelete(activities: { name: string, selected: boolean }[], nombreUsuario: string): Observable<{ activitiesDelete: { name: string; selected: boolean; }[]; activitiesAdd: { name: string; selected: boolean; }[]; }> {
@@ -86,29 +86,48 @@ export class PreferenciasComponent {
       );
   }
 
+  refreshPage() {
+    location.reload();
+  }
+
   updatePreferences() {
     if (this.isLogueado && this.perfilUsuario) {
       let nombreUsuario = <string> this.perfilUsuario.username;
-      console.log(this.activities)
+  
       this.activitiesToDelete(this.activities, nombreUsuario).subscribe(
         ({ activitiesDelete, activitiesAdd }) => {
           console.log('Actividades a eliminar:', activitiesDelete);
-          activitiesDelete.forEach((activitie) => {
-            console.log("Actividad a eliminar: ", activitie)
-            this.apiService.deleteUsuarioActividad(nombreUsuario,activitie.name).subscribe(resp => console.log(resp))
-          })
-          console.log('Actividades a agregar:', activitiesAdd);
-          activitiesAdd.forEach((activitie) => {
-            console.log("Actividad a agregar: ", activitie)
-            this.apiService.postUsuarioActividad(nombreUsuario,activitie.name).subscribe(resp => console.log(resp))
-          })
+  
+            const deleteRequests = activitiesDelete.map((activitie) => 
+            this.apiService.deleteUsuarioActividad(nombreUsuario, activitie.name)
+          );
+  
+          const addRequests = activitiesAdd.map((activitie) => 
+            this.apiService.postUsuarioActividad(nombreUsuario, activitie.name)
+          );
+  
+          // Esperamos a que terminen todos los observables
+          const allRequests = forkJoin([...deleteRequests, ...addRequests]);
+
+          //Refrescamos la pagina cuando terminen las operaciones
+          allRequests.pipe(
+            finalize(() => {
+              this.refreshPage();
+            })
+          ).subscribe(
+            (responses) => {
+              console.log('Responses:', responses);
+            },
+            (error) => {
+              console.error('Error al obtener actividades a eliminar:', error);
+            }
+          );
         },
         (error) => {
           console.error('Error al obtener actividades a eliminar:', error);
         }
       );
     }
-    
     console.log('Actividades seleccionadas:', this.activities.filter(activity => activity.selected));
   }
 
