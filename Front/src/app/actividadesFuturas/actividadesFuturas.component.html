@@ -1,0 +1,47 @@
+<div class="modal" id="modalFuturo" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Selecciona una fecha y ubicación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"  style="position: relative">        
+          <div class="container">
+            <div class="row">
+              <p>Ingrese una fecha:</p>
+                <div class="col-xs-12 col-12">
+                    <div class="input-group">
+                        <input
+                            class="form-control"
+                            placeholder="Máximo 15 días a partir de hoy"
+                            ngbDatepicker
+                            #dp="ngbDatepicker"
+                            [(ngModel)]="fechaSeleccionada"
+                            (ngModelChange)="actualizarFechaSeleccionada($event)"
+                            [minDate]="fechaActual"
+                            [maxDate]="calcularFechaMaxima()"
+                        />
+                        <p id="alerta"></p>
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" (click)="dp.toggle()">
+                            <i class="bi fa-4x bi-calendar-day"></i>
+                          </button>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+            <p class="pt-3 ">Ingrese la ubicación a buscar:</p>
+            <div class="row ps-3 pe-3">                              
+              <input type="text" id="inputUbicacion" #addresstext>                
+            </div>
+        </div>      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="limitarFecha()" >Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>

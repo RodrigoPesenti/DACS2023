@@ -1,6 +1,5 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
@@ -13,6 +12,9 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { PreferenciasComponent } from './preferencias/preferencias.component';
 import { FormsModule } from '@angular/forms';
+import { ActividadesFuturasComponent } from './actividadesFuturas/actividadesFuturas.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,14 +22,16 @@ import { FormsModule } from '@angular/forms';
     MapaComponent,
     NavBarComponent,
     InicioComponent,
-    PreferenciasComponent
+    PreferenciasComponent,
+    ActividadesFuturasComponent
   ],
   imports: [
     BrowserModule,
     KeycloakAngularModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule  
+    FormsModule,
+    NgbModule  
   ],
   providers: [
     {

@@ -38,6 +38,30 @@
     opacity: 1;
   }
 
-  .gap-custom {
-    margin: 7vw; /* Ajusta este valor a la cantidad de espacio que desees */
+  .gap-custom-ppal {
+    margin-top: 1vw; /* Ajusta este valor a la cantidad de espacio que desees */
+    margin-bottom: 2vw;
+  }
+  .gap-custom-futuro {
+    margin-top: 1vw; /* Ajusta este valor a la cantidad de espacio que desees */
+    margin-bottom: 0.5vw;
+    font-size: 2vw;
+  }
+
+  /*Aqui las coustomizaciones del boton "Actividades Futuras"*/
+
+  .slim-orange-button{
+    display: inline-block;
+    padding: 1.5vw 4vw; /* Change fixed px to vw for responsive padding */
+    font-size: 3vw; /* Change fixed px to vw for responsive font-size */
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: orange;
+    border: none;
+    border-radius: 7vw;
+    position: relative;
+    transition: all 0s;
   }

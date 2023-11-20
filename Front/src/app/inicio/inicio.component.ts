@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../core/services/apiservice.service';
 import { IClimaResponse } from '../core/models/response.interface';
 import { map} from 'rxjs';
+import { ActividadesFuturasComponent } from '../actividadesFuturas/actividadesFuturas.component';
 
 
 @Component({
@@ -36,8 +37,15 @@ public climaResponse : IClimaResponse  | null = null;
     
   }
   
+  toggleModal() {
+    const modal: any = document.querySelector('#modalFuturo'); 
+    modal.style.display = 'block'; 
+  }
 
-  
+  closeModal() {
+    const modalFuturo: any = document.querySelector('#modalFuturo'); 
+    modalFuturo.style.display = 'none';  
+  }
   
   codigoClima(codigo: number): string {
     const weatherCases: Record<number, string> = {
@@ -139,6 +147,7 @@ public climaResponse : IClimaResponse  | null = null;
         case 57:          
         case 66:
         case 86:
+        case 96:
             resultado = "../../assets/images/Llovizna-helada.png";
             break;   
         //Mist    
