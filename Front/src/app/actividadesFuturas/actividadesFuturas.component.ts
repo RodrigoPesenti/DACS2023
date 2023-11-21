@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';  // Asegúrate de importar NgbDate
+import { NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap'; 
+import { LocationService } from '../core/services/actFutura.service';
 declare var google: any;
 
 @Component({
@@ -9,12 +10,13 @@ declare var google: any;
 })
 
 export class ActividadesFuturasComponent implements OnInit {
-  fechaActual!: NgbDate; // Cambiado el tipo de Date a NgbDate
+  fechaActual!: NgbDate; 
   @ViewChild('addresstext') addresstext: ElementRef | undefined;
   fechaSeleccionada: NgbDateStruct | undefined;
 
-  constructor(private calendar: NgbCalendar) {}
+  constructor(private calendar: NgbCalendar, private locationService: LocationService) {}
 
+  
   ngOnInit(): void {
     this.fechaActual = this.calendar.getToday();
   }
@@ -71,6 +73,10 @@ export class ActividadesFuturasComponent implements OnInit {
 
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace();
+        const latitud = place.geometry.location.lat();
+        const longitud = place.geometry.location.lng();
+        this.locationService.setLatitude(latitud);
+        this.locationService.setLongitude(longitud);
         console.log(place.geometry.location.lat());
         console.log(place.geometry.location.lng());
       });

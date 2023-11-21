@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../core/services/apiservice.service';
 import { IClimaResponse } from '../core/models/response.interface';
-import { map} from 'rxjs';
-import { ActividadesFuturasComponent } from '../actividadesFuturas/actividadesFuturas.component';
+import { LocationService } from '../core/services/actFutura.service';
 
 
 @Component({
@@ -12,13 +11,17 @@ import { ActividadesFuturasComponent } from '../actividadesFuturas/actividadesFu
 })
 export class InicioComponent implements OnInit {
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
+private locationCoordinates: { latitude: number, longitude: number } | null = null;
 public climaActual : String = "";
 public climaImagenURL: String = "";
 public climaResponse : IClimaResponse  | null = null;
+private latitud!: number;
+private longitud!: number;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private locationService: LocationService) {}
 
   public async ngOnInit() {
+    if (!this.locationService.getLatitude()){
     await this.apiService.getLocation().then((coordinates) => {
       this.persistentCoordinates = { latitude: coordinates.latitude, longitude: coordinates.longitude };
       if (this.persistentCoordinates) {
@@ -35,7 +38,18 @@ public climaResponse : IClimaResponse  | null = null;
       }      
     });
     
+  }}
+
+  actualizarUbicacion(): void {
+    const latitud = this.locationService.getLatitude();
+    const longitud = this.locationService.getLongitude();
+
+    if (latitud && longitud) {
+      this.latitud = latitud;
+      this.longitud = longitud
+    }
   }
+
   
   toggleModal() {
     const modal: any = document.querySelector('#modalFuturo'); 
@@ -83,9 +97,11 @@ public climaResponse : IClimaResponse  | null = null;
   }
 
   devuelveClima(): void {
-    if (this.persistentCoordinates) {
-      this.apiService.getClima(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude)
-        .subscribe({
+    if (this.locationCoordinates) {
+      this.persistentCoordinates = this.locationCoordinates;
+    }
+    this.apiService.getClima(this.latitud, this.longitud)
+      .subscribe({
           next:(climaResponse) => {
             this.climaActual = this.codigoClima(climaResponse.daily.weather_code[0]);               
           },
@@ -93,10 +109,7 @@ public climaResponse : IClimaResponse  | null = null;
             console.error("Error al obtener el clima:", error);
           }
       });
-    }
-  }
-
-
+}
 
 
  imagenClima(codigo: number): string {
