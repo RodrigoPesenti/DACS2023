@@ -11,23 +11,36 @@ import { LocationService } from '../core/services/actFutura.service';
 })
 export class InicioComponent implements OnInit {
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
-private locationCoordinates: { latitude: number, longitude: number } | null = null;
 public climaActual : String = "";
 public climaImagenURL: String = "";
 public climaResponse : IClimaResponse  | null = null;
-private latitud!: number;
-private longitud!: number;
 
   constructor(private apiService: ApiService, private locationService: LocationService) {}
 
   public async ngOnInit() {
-    if (!this.locationService.getLatitude()){
+    console.log("Latitud: ", this.locationService.getLatitude())
+    if (this.locationService.getLatitude()){
+      this.apiService.getClima(<number>this.locationService.getLatitude(), <number>this.locationService.getLongitude())
+      .subscribe({
+        next: (climaResponse) => {
+          console.log("Tiene coordenadas custom: ",this.locationService.getLatitude(), this.locationService.getLongitude())
+          this.persistentCoordinates = { latitude: <number>this.locationService.getLatitude(), longitude: <number>this.locationService.getLongitude() };
+          this.climaActual = this.codigoClima(climaResponse.daily.weather_code[<number>this.locationService.getDia()]);
+          this.climaImagenURL = this.imagenClima(climaResponse.daily.weather_code[<number>this.locationService.getDia()]);
+        },
+        error: (error) => {
+          console.error("Error al obtener el clima:", error);
+        }
+      });
+  }
+  else {
     await this.apiService.getLocation().then((coordinates) => {
       this.persistentCoordinates = { latitude: coordinates.latitude, longitude: coordinates.longitude };
       if (this.persistentCoordinates) {
         this.apiService.getClima(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude)
           .subscribe({
             next: (climaResponse) => {
+              console.log("No tiene coordenadas custom")
               this.climaActual = this.codigoClima(climaResponse.daily.weather_code[0]);
               this.climaImagenURL = this.imagenClima(climaResponse.daily.weather_code[0]);
             },
@@ -36,19 +49,10 @@ private longitud!: number;
             }
           });
       }      
-    });
-    
-  }}
-
-  actualizarUbicacion(): void {
-    const latitud = this.locationService.getLatitude();
-    const longitud = this.locationService.getLongitude();
-
-    if (latitud && longitud) {
-      this.latitud = latitud;
-      this.longitud = longitud
-    }
+    });      
   }
+  
+}
 
   
   toggleModal() {
@@ -97,10 +101,8 @@ private longitud!: number;
   }
 
   devuelveClima(): void {
-    if (this.locationCoordinates) {
-      this.persistentCoordinates = this.locationCoordinates;
-    }
-    this.apiService.getClima(this.latitud, this.longitud)
+    if (this.persistentCoordinates) {
+    this.apiService.getClima(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude)
       .subscribe({
           next:(climaResponse) => {
             this.climaActual = this.codigoClima(climaResponse.daily.weather_code[0]);               
@@ -109,6 +111,7 @@ private longitud!: number;
             console.error("Error al obtener el clima:", error);
           }
       });
+    }
 }
 
 

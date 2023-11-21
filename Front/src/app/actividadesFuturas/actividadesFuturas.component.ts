@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import { NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap'; 
 import { LocationService } from '../core/services/actFutura.service';
 declare var google: any;
@@ -13,11 +13,15 @@ export class ActividadesFuturasComponent implements OnInit {
   fechaActual!: NgbDate; 
   @ViewChild('addresstext') addresstext: ElementRef | undefined;
   fechaSeleccionada: NgbDateStruct | undefined;
+  private latitud: number = 0;
+  private longitud: number = 0;
+  private adress: string = "";
 
   constructor(private calendar: NgbCalendar, private locationService: LocationService) {}
 
   
   ngOnInit(): void {
+
     this.fechaActual = this.calendar.getToday();
   }
 
@@ -32,33 +36,20 @@ export class ActividadesFuturasComponent implements OnInit {
     return fechaMaxima;
   }
 
-  limitarFecha(): boolean {
-    if (this.fechaSeleccionada) {
-      const diaActual = this.fechaActual.day;
-      const diaSeleccionada = this.fechaSeleccionada.day;
-      const diferencia = diaSeleccionada - diaActual;
-
-      if (diferencia > 15) {
-        // Actualizar el contenido del párrafo
-        const alertaElement: HTMLElement | null = document.getElementById('alerta');
-        if (alertaElement) {
-          alertaElement.innerText = 'La fecha debe ser menor o igual a 16 días superior a la fecha actual';
-        }
-        console.log('Superior', this.fechaSeleccionada);
-        return false;
-      }
-      else{
-        console.log('Actual', diaActual);
-        console.log('Seleccion', this.fechaSeleccionada);
-      }
+  getCantidadDias(fechaFin: NgbDateStruct): number | undefined {
+    const fechaActual = new Date(); // Obtener la fecha actual del sistema
+  
+    if (!fechaFin) {
+      return undefined; // Si la fecha de fin no está definida, retornar undefined
     }
-
-    // Restablecer el contenido del párrafo si la diferencia es menor o igual a 16
-    const alertaElement: HTMLElement | null = document.getElementById('alerta');
-    if (alertaElement) {
-      alertaElement.innerText = '';
-    }
-    return true;
+  
+    const inicio = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+    const fin = new Date(fechaFin.year, fechaFin.month - 1, fechaFin.day);
+  
+    const diferenciaTiempo = fin.getTime() - inicio.getTime();
+    const diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+  
+    return Math.abs(Math.round(diferenciaDias)); // Devolver la cantidad de días como un número positivo
   }
 
   ngAfterViewInit(): void {
@@ -73,12 +64,9 @@ export class ActividadesFuturasComponent implements OnInit {
 
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace();
-        const latitud = place.geometry.location.lat();
-        const longitud = place.geometry.location.lng();
-        this.locationService.setLatitude(latitud);
-        this.locationService.setLongitude(longitud);
-        console.log(place.geometry.location.lat());
-        console.log(place.geometry.location.lng());
+        this.adress = place.formatted_address;
+        this.latitud = place.geometry.location.lat();
+        this.longitud = place.geometry.location.lng();
       });
     }
   }
@@ -86,5 +74,19 @@ export class ActividadesFuturasComponent implements OnInit {
   closeModal(): void {
     const modalFuturo: any = document.querySelector('#modalFuturo');
     modalFuturo.style.display = 'none';
+  }
+
+  confirmarSeleccion(): void {
+    this.locationService.setLatitude(this.latitud);
+    this.locationService.setLongitude(this.longitud);
+    this.locationService.setAdress(this.adress)
+    if (this.fechaSeleccionada){
+      this.locationService.setDia(<number>this.getCantidadDias(this.fechaSeleccionada))
+    }
+    console.log(this.locationService.getLatitude());
+    console.log(this.locationService.getLongitude());
+    console.log(this.locationService.getAdress())
+    console.log(this.locationService.getDia())
+    location.reload();
   }
 }

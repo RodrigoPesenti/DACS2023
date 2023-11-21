@@ -3,7 +3,8 @@ import { ApiService } from '../core/services/apiservice.service';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
 import {IPreferencia, IClimaResponse} from '../core/models/response.interface';
-import { Observable, map, forkJoin, of} from 'rxjs';
+import { Observable, map, forkJoin, of, delay} from 'rxjs';
+import { LocationService } from '../core/services/actFutura.service';
 
 
 @Component({
@@ -23,8 +24,9 @@ public prefEmpty : boolean = false;
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
 private ubicacion:string = "Concepción+del+Uruguay"
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
+private dia: number | null = null;
 
-constructor(private readonly keycloak: KeycloakService,private apiService: ApiService) {}
+constructor(private readonly keycloak: KeycloakService,private apiService: ApiService, private locationService: LocationService) {}
 
 sonidoCard() { 
         var sonido = new Audio('../../assets/sounds/CardSound.mp3');
@@ -43,16 +45,27 @@ sonidoCard() {
      ];
 
   async ngOnInit() {
-    this.apiService.getLocation().then((coordinates) => {
-      console.log(`Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}`);
-      this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.longitude}
-    })
-    .catch((error) => {
-      console.error('Error getting location:', error);
-    });
-    this.actualizarMapa(this.ubicacion);
-    this.isLogueado = await this.keycloak.isLoggedIn();
+    console.log("Service: ", this.locationService.getAdress())
+    if (this.locationService.getLatitude()){ //Si esta cargado el location service
+      this.persistentCoordinates = {latitude: <number>this.locationService.getLatitude(), longitude: <number>this.locationService.getLongitude()}
+      console.log("Lat: ", this.locationService.getLatitude(), "Long: ", this.locationService.getLongitude(), "Adress: ", this.locationService.getAdress())
+      this.ubicacion = <string>this.locationService.getAdress()
+      this.actualizarMapa(this.ubicacion); 
+      this.dia = this.locationService.getDia();
+    }
+    else { //Si no esta cargado el location service
+      this.apiService.getLocation().then((coordinates) => {
+        console.log(`Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}`);
+        this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.latitude}
+      })
+      .catch((error) => {
+        console.error('Error getting location:', error);
+      });
+      this.actualizarMapa(this.ubicacion); 
+    }
+    
 
+    this.isLogueado = await this.keycloak.isLoggedIn();
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
       if (this.perfilUsuario && this.perfilUsuario.username) {
@@ -89,13 +102,14 @@ sonidoCard() {
     if (this.persistentCoordinates) {
       return this.apiService.getClima(this.persistentCoordinates.latitude,this.persistentCoordinates.longitude).pipe(
         map((climaResponse) => {
-          if (
-            climaResponse.daily.temperature_2m_min[0] >= valoresAceptables.tempmin &&
-            climaResponse.daily.temperature_2m_max[0] <= valoresAceptables.tempmax &&
-            climaResponse.daily.precipitation_probability_max[0] >= valoresAceptables.precipitacionmin &&
-            climaResponse.daily.precipitation_probability_max[0] <= valoresAceptables.precipitacionmax &&
-            climaResponse.daily.wind_speed_10m_max[0] >= valoresAceptables.vientomin &&
-            climaResponse.daily.wind_speed_10m_max[0] <= valoresAceptables.vientomax
+          console.log("Dia: ", this.dia);
+          if (          
+            climaResponse.daily.temperature_2m_min[<number>this.dia] >= valoresAceptables.tempmin &&
+            climaResponse.daily.temperature_2m_max[<number>this.dia] <= valoresAceptables.tempmax &&
+            climaResponse.daily.precipitation_probability_max[<number>this.dia] >= valoresAceptables.precipitacionmin &&
+            climaResponse.daily.precipitation_probability_max[<number>this.dia] <= valoresAceptables.precipitacionmax &&
+            climaResponse.daily.wind_speed_10m_max[<number>this.dia] >= valoresAceptables.vientomin &&
+            climaResponse.daily.wind_speed_10m_max[<number>this.dia] <= valoresAceptables.vientomax
           ) {
             return true;
           } else {
