@@ -11,45 +11,46 @@ import { Observable, finalize, forkJoin, map } from 'rxjs';
   styleUrls: ['./preferencias.component.css']
 })
 export class PreferenciasComponent {
-  pesca=false
+  pesca = false
   public perfilUsuario: KeycloakProfile | null = null;
   public isLogueado = false;
   activities: { name: string, selected: boolean }[] = [];
+  public desactivarBotonGuardar: boolean = false;
 
-  constructor(private readonly keycloak: KeycloakService,private apiService: ApiService) {}
+  constructor(private readonly keycloak: KeycloakService, private apiService: ApiService) { }
 
-  async ngOnInit(){
+  async ngOnInit() {
     this.isLogueado = await this.keycloak.isLoggedIn();
 
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
-      let nombreUsuario = <string> this.perfilUsuario.username;
+      let nombreUsuario = <string>this.perfilUsuario.username;
       this.apiService.getActividades().subscribe(
-        (listaActividades)=>{
+        (listaActividades) => {
           this.apiService.getPreferenciasUsuario(nombreUsuario).subscribe(
-            (listaPreferencias)=>{
+            (listaPreferencias) => {
               console.log("pref usuario: ", listaPreferencias)
               //Agrego a la lista con las actividades existentes
               listaActividades.forEach(
                 (actividad) => {
                   const matchingPreferencia = listaPreferencias.find(preferencia => preferencia.nombre === actividad.nombre);
                   if (matchingPreferencia) {
-                    this.activities.push({name: actividad.nombre, selected:true})
-                  } else{
-                    this.activities.push({name: actividad.nombre, selected:false})
+                    this.activities.push({ name: actividad.nombre, selected: true })
+                  } else {
+                    this.activities.push({ name: actividad.nombre, selected: false })
                   }
                 }
               )
-              
+
             }
           )
         }
       );
-      
+
     }
     else {
-        console.log("El usuario no esta logeado")
-      };
+      console.log("El usuario no esta logeado")
+    };
   }
 
   saveActivities() {
@@ -57,8 +58,9 @@ export class PreferenciasComponent {
   }
 
   closeModal() {
-    const modal: any = document.querySelector('.modal'); 
-      modal.style.display = 'none';  
+    const modal: any = document.querySelector('.modal');
+    modal.style.display = 'none';
+    this.refreshPage();
   }
 
   activitiesToDelete(activities: { name: string, selected: boolean }[], nombreUsuario: string): Observable<{ activitiesDelete: { name: string; selected: boolean; }[]; activitiesAdd: { name: string; selected: boolean; }[]; }> {
@@ -68,18 +70,18 @@ export class PreferenciasComponent {
           const activitiesDelete: { name: string, selected: boolean }[] = [];
           const activitiesAdd: { name: string, selected: boolean }[] = [];
           activities.forEach((activitie) => {
-            
-              const existentPreference = listaPreferencias.find(preferencia => preferencia.nombre === activitie.name);
-              if (existentPreference) {
-                if (!activitie.selected) {
-                  activitiesDelete.push(activitie);
-                }
+
+            const existentPreference = listaPreferencias.find(preferencia => preferencia.nombre === activitie.name);
+            if (existentPreference) {
+              if (!activitie.selected) {
+                activitiesDelete.push(activitie);
               }
-              else {
-                if (activitie.selected) {
-                  activitiesAdd.push(activitie);
-                }
+            }
+            else {
+              if (activitie.selected) {
+                activitiesAdd.push(activitie);
               }
+            }
           });
           return { activitiesDelete, activitiesAdd };
         })
@@ -92,20 +94,21 @@ export class PreferenciasComponent {
 
   updatePreferences() {
     if (this.isLogueado && this.perfilUsuario) {
-      let nombreUsuario = <string> this.perfilUsuario.username;
-  
+      this.desactivarBotonGuardar = true;
+      let nombreUsuario = <string>this.perfilUsuario.username;
+
       this.activitiesToDelete(this.activities, nombreUsuario).subscribe(
         ({ activitiesDelete, activitiesAdd }) => {
           console.log('Actividades a eliminar:', activitiesDelete);
-  
-            const deleteRequests = activitiesDelete.map((activitie) => 
+
+          const deleteRequests = activitiesDelete.map((activitie) =>
             this.apiService.deleteUsuarioActividad(nombreUsuario, activitie.name)
           );
-  
-          const addRequests = activitiesAdd.map((activitie) => 
+
+          const addRequests = activitiesAdd.map((activitie) =>
             this.apiService.postUsuarioActividad(nombreUsuario, activitie.name)
           );
-  
+
           // Esperamos a que terminen todos los observables
           const allRequests = forkJoin([...deleteRequests, ...addRequests]);
 

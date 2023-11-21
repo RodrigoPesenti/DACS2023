@@ -18,7 +18,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Cerrar</button>
-          <button type="button" class="btn btn-primary" (click)="updatePreferences()">Guardar</button>
+          <button type="button" class="btn btn-primary" [disabled]="desactivarBotonGuardar" (click)="updatePreferences()">Guardar</button>
         </div>
       </div>
     </div>
