@@ -21,36 +21,32 @@ export class PreferenciasComponent {
 
   async ngOnInit() {
     this.isLogueado = await this.keycloak.isLoggedIn();
-
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
       let nombreUsuario = <string>this.perfilUsuario.username;
-      this.apiService.getActividades().subscribe(
-        (listaActividades) => {
-          this.apiService.getPreferenciasUsuario(nombreUsuario).subscribe(
-            (listaPreferencias) => {
-              console.log("pref usuario: ", listaPreferencias)
-              //Agrego a la lista con las actividades existentes
-              listaActividades.forEach(
-                (actividad) => {
-                  const matchingPreferencia = listaPreferencias.find(preferencia => preferencia.nombre === actividad.nombre);
-                  if (matchingPreferencia) {
-                    this.activities.push({ name: actividad.nombre, selected: true })
-                  } else {
-                    this.activities.push({ name: actividad.nombre, selected: false })
-                  }
-                }
-              )
 
+      this.apiService.getActividades().subscribe((listaActividades) => {
+        this.apiService.getPreferenciasUsuario(nombreUsuario).subscribe((listaPreferencias) => {
+
+          listaActividades.forEach((actividad) => {
+            const matchingPreferencia = listaPreferencias.find(preferencia => preferencia.nombre === actividad.nombre);
+            if (matchingPreferencia) {
+              this.activities.push({ name: actividad.nombre, selected: true })
+            } else {
+              this.activities.push({ name: actividad.nombre, selected: false })
             }
-          )
-        }
-      );
+          })
 
+        })
+      });
     }
     else {
       console.log("El usuario no esta logeado")
     };
+  }
+
+  refreshPage() {
+    location.reload();
   }
 
   saveActivities() {
@@ -64,32 +60,23 @@ export class PreferenciasComponent {
   }
 
   activitiesToDelete(activities: { name: string, selected: boolean }[], nombreUsuario: string): Observable<{ activitiesDelete: { name: string; selected: boolean; }[]; activitiesAdd: { name: string; selected: boolean; }[]; }> {
-    return this.apiService.getPreferenciasUsuario(nombreUsuario)
-      .pipe(
-        map((listaPreferencias) => {
-          const activitiesDelete: { name: string, selected: boolean }[] = [];
-          const activitiesAdd: { name: string, selected: boolean }[] = [];
-          activities.forEach((activitie) => {
+    return this.apiService.getPreferenciasUsuario(nombreUsuario).pipe(map((listaPreferencias) => {
+      const activitiesDelete: { name: string, selected: boolean }[] = [];
+      const activitiesAdd: { name: string, selected: boolean }[] = [];
 
-            const existentPreference = listaPreferencias.find(preferencia => preferencia.nombre === activitie.name);
-            if (existentPreference) {
-              if (!activitie.selected) {
-                activitiesDelete.push(activitie);
-              }
-            }
-            else {
-              if (activitie.selected) {
-                activitiesAdd.push(activitie);
-              }
-            }
-          });
-          return { activitiesDelete, activitiesAdd };
-        })
-      );
-  }
+      activities.forEach((activitie) => {
+        const existentPreference = listaPreferencias.find(preferencia => preferencia.nombre === activitie.name);
+        if (existentPreference && !activitie.selected) {
+          activitiesDelete.push(activitie);
+        }
+        else if (!existentPreference && activitie.selected) {
+          activitiesAdd.push(activitie);
+        }
+      });
 
-  refreshPage() {
-    location.reload();
+      return { activitiesDelete, activitiesAdd };
+    })
+    );
   }
 
   updatePreferences() {
@@ -109,22 +96,16 @@ export class PreferenciasComponent {
             this.apiService.postUsuarioActividad(nombreUsuario, activitie.name)
           );
 
-          // Esperamos a que terminen todos los observables
+          // forkJoin para esperar a todas las operaciones asincronas
           const allRequests = forkJoin([...deleteRequests, ...addRequests]);
 
-          //Refrescamos la pagina cuando terminen las operaciones
-          allRequests.pipe(
-            finalize(() => {
-              this.refreshPage();
-            })
-          ).subscribe(
+          allRequests.pipe(finalize(() => { this.refreshPage(); })).subscribe(
             (responses) => {
               console.log('Responses:', responses);
             },
             (error) => {
               console.error('Error al obtener actividades a eliminar:', error);
-            }
-          );
+            });
         },
         (error) => {
           console.error('Error al obtener actividades a eliminar:', error);
