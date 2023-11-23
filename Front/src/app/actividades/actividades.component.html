@@ -11,6 +11,7 @@
     <div
       class="d-flex flex-column col-sm-3 hover-div p-3 justify-content-center align-items-center text-center"
       (click)="buscarEnMapa(actividad.nombre)"
+      href = '#mapa'
       (mouseenter)="sonidoCard()"
       *ngFor="let actividad of actividadesFactibles"
     >

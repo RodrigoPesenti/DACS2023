@@ -21,7 +21,7 @@ public climaResponse: IClimaResponse | null = null;
 public actividadesFactibles : IPreferencia[]  | null = null;
 public prefEmpty : boolean = false;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
-private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4&q=";
+private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4";
 private ubicacion:string = "Concepción+del+Uruguay"
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
 private dia: number | null = null;
@@ -45,23 +45,24 @@ sonidoCard() {
      ];
 
   async ngOnInit() {
-    console.log("Service: ", this.locationService.getAdress())
     if (this.locationService.getLatitude()){ //Si esta cargado el location service
       this.persistentCoordinates = {latitude: <number>this.locationService.getLatitude(), longitude: <number>this.locationService.getLongitude()}
       console.log("Lat: ", this.locationService.getLatitude(), "Long: ", this.locationService.getLongitude(), "Adress: ", this.locationService.getAdress())
       this.ubicacion = <string>this.locationService.getAdress()
-      this.actualizarMapa(this.ubicacion); 
+      this.InicializarMapaConUbicacion(this.ubicacion); 
       this.dia = this.locationService.getDia();
     }
     else { //Si no esta cargado el location service
       this.apiService.getLocation().then((coordinates) => {
         console.log(`Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}`);
-        this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.latitude}
+        this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.longitude};
+        this.InicializarMapaConLatYLong(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude); //Lo inicializa en esa lat y long, pero despues busca por la predefinida nomas, arreglar
+        this.dia = 0;
       })
       .catch((error) => {
         console.error('Error getting location:', error);
       });
-      this.actualizarMapa(this.ubicacion); 
+      
     }
     
 
@@ -102,8 +103,25 @@ sonidoCard() {
     if (this.persistentCoordinates) {
       return this.apiService.getClima(this.persistentCoordinates.latitude,this.persistentCoordinates.longitude).pipe(
         map((climaResponse) => {
-          console.log("Dia: ", this.dia);
-          if (          
+          //console.log("Dia: ", this.dia);
+          // console.log('Valores a comparar:');
+          // console.log('-------------------');
+          // console.log('Día:', this.dia);
+          // console.log('Temperatura mínima:', climaResponse.daily.temperature_2m_min[<number>this.dia]);
+          // console.log('Temperatura máxima:', climaResponse.daily.temperature_2m_max[<number>this.dia]);
+          // console.log('Probabilidad de precipitación:', climaResponse.daily.precipitation_probability_max[<number>this.dia]);
+          // console.log('Velocidad del viento:', climaResponse.daily.wind_speed_10m_max[<number>this.dia]);
+          // console.log('Valores aceptables:');
+          // console.log('-------------------');
+          // console.log('Nombre actividad: ', valoresAceptables.nombre)
+          // console.log('TempMin Aceptable:', valoresAceptables.tempmin);
+          // console.log('TempMax Aceptable:', valoresAceptables.tempmax);
+          // console.log('Precipitación Min Aceptable:', valoresAceptables.precipitacionmin);
+          // console.log('Precipitación Max Aceptable:', valoresAceptables.precipitacionmax);
+          // console.log('Viento Min Aceptable:', valoresAceptables.vientomin);
+          // console.log('Viento Max Aceptable:', valoresAceptables.vientomax);
+
+          if (      
             climaResponse.daily.temperature_2m_min[<number>this.dia] >= valoresAceptables.tempmin &&
             climaResponse.daily.temperature_2m_max[<number>this.dia] <= valoresAceptables.tempmax &&
             climaResponse.daily.precipitation_probability_max[<number>this.dia] >= valoresAceptables.precipitacionmin &&
@@ -141,18 +159,30 @@ sonidoCard() {
   }
 
   buscarEnMapa(nombreActividad:string): void {
-    location.href = '#mapa';
-    let nuevaURL = nombreActividad + "," + this.ubicacion;
-    this.actualizarMapa(nuevaURL);
+      var iframe = document.getElementById('mapaGoogle');
+      location.href = '#mapa';
+      let nuevaURL = this.urlBase + "&q=" + nombreActividad + "," + this.ubicacion;
+      if (iframe) {
+        console.log(iframe.getAttribute('src'));
+        iframe.setAttribute('src', nuevaURL);
+      }
   }
 
-  actualizarMapa(cadenaBuscada:string){
+  InicializarMapaConUbicacion(nombreActividad:string): void {
     var iframe = document.getElementById('mapaGoogle');
-
+    let nuevaURL = this.urlBase + "&q=" + nombreActividad + "," + this.ubicacion;
     if (iframe) {
       console.log(iframe.getAttribute('src'));
-      var nuevoSrc = this.urlBase + cadenaBuscada;
-      iframe.setAttribute('src', nuevoSrc);
+      iframe.setAttribute('src', nuevaURL);
+    }
+}
+
+  InicializarMapaConLatYLong(lat: number, lon: number) {
+    var iframe = document.getElementById('mapaGoogle');
+    let nuevaURL = this.urlBase + "&q=" + lat + "," + lon;
+    if (iframe) {
+      console.log(iframe.getAttribute('src'));
+      iframe.setAttribute('src', nuevaURL);
     }
   }
 

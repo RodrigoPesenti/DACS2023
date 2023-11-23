@@ -18,43 +18,55 @@ public climaResponse : IClimaResponse  | null = null;
   constructor(private apiService: ApiService, private locationService: LocationService) {}
 
   public async ngOnInit() {
-    console.log("Latitud: ", this.locationService.getLatitude())
-    if (this.locationService.getLatitude()){
-      this.apiService.getClima(<number>this.locationService.getLatitude(), <number>this.locationService.getLongitude())
-      .subscribe({
-        next: (climaResponse) => {
-          console.log("Tiene coordenadas custom: ",this.locationService.getLatitude(), this.locationService.getLongitude())
-          this.persistentCoordinates = { latitude: <number>this.locationService.getLatitude(), longitude: <number>this.locationService.getLongitude() };
-          this.climaActual = this.codigoClima(climaResponse.daily.weather_code[<number>this.locationService.getDia()]);
-          this.climaImagenURL = this.imagenClima(climaResponse.daily.weather_code[<number>this.locationService.getDia()]);
-        },
-        error: (error) => {
-          console.error("Error al obtener el clima:", error);
-        }
-      });
-  }
-  else {
-    await this.apiService.getLocation().then((coordinates) => {
-      this.persistentCoordinates = { latitude: coordinates.latitude, longitude: coordinates.longitude };
-      if (this.persistentCoordinates) {
-        this.apiService.getClima(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude)
-          .subscribe({
-            next: (climaResponse) => {
-              console.log("No tiene coordenadas custom")
-              this.climaActual = this.codigoClima(climaResponse.daily.weather_code[0]);
-              this.climaImagenURL = this.imagenClima(climaResponse.daily.weather_code[0]);
-            },
-            error: (error) => {
-              console.error("Error al obtener el clima:", error);
-            }
-          });
-      }      
-    });      
-  }
-  
-}
+    // Obtiene la latitud de la ubicación actual
+    const latitude = <number>this.locationService.getLatitude();
+    const longitude = <number>this.locationService.getLongitude();
+    console.log("Latitud service: ", latitude);
 
+    // Verifica si se obtuvo la latitud
+    if (latitude) {
+      console.log("Tiene coordenadas custom: ", latitude, longitude);
+      const dia = <number>this.locationService.getDia()
+      // Si hay latitud, se obtiene el clima usando las coordenadas actuales
+      this.fetchWeatherForcast(latitude, longitude, dia);
+    } else {
+      console.log("No tiene coordenadas custom: ");
+      // Si no hay latitud, se obtienen primero las coordenadas y luego el clima
+      await this.fetchLocationAndWeather();
+    }
+  }
+
+  private fetchWeatherForcast(latitude: number, longitude: number, dia: number): void {
+    // Obtiene el clima utilizando las coordenadas proporcionadas
+    this.apiService.getClima(latitude, longitude).subscribe({
+      next: (climaResponse) => {
+        
+        // Establece las coordenadas persistentes
+        this.persistentCoordinates = { latitude, longitude };
+        // Actualiza el clima actual y la URL de la imagen del clima
+        this.updateWeatherInfo(climaResponse.daily.weather_code[dia]);
+      },
+      error: (error) => {
+        console.error("Error al obtener el clima:", error);
+      }
+    });
+  }
+
+  private async fetchLocationAndWeather(): Promise<void> {
+    // Obtiene las coordenadas usando el servicio de API
+    const coordinates = await this.apiService.getLocation();
+    if (coordinates) {
+      // Si se obtienen las coordenadas, obtiene el clima utilizando esas coordenadas
+      this.fetchWeatherForcast(coordinates.latitude, coordinates.longitude, 0);
+    }
+  }
   
+  private updateWeatherInfo(weatherCode: number): void {
+    // Actualiza el clima actual y la URL de la imagen del clima basado en el código de clima proporcionado
+    this.climaActual = this.codigoClima(weatherCode);
+    this.climaImagenURL = this.imagenClima(weatherCode);
+  }
+
   toggleModal() {
     const modal: any = document.querySelector('#modalFuturo'); 
     modal.style.display = 'block'; 
