@@ -17,21 +17,13 @@ export class AppComponent implements OnInit {
   public versionResponse : IVersionResponse  | null = null;
   public perfilUsuario: KeycloakProfile | null = null;
   public usuarioResponse: IUsuario | null = null
-  public role = false;
   constructor(private readonly keycloak: KeycloakService,private apiService: ApiService) {}
 
   public async ngOnInit() {
 
     this.isLogueado = await this.keycloak.isLoggedIn();
-    this.role=await this.keycloak.isUserInRole("ROLE-A");
-    this.role=true;
     this.apiService.getVersion().subscribe(resp => {this.versionResponse= resp});
-    console.log ("role=====>", this.role );
-    if(this.isLogueado && !this.role){
-      this.keycloak.logout();
-      return;
-    }
-    type rolesUsuarios = Array<{id: number, text: string}>;
+   
 
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
@@ -45,6 +37,7 @@ export class AppComponent implements OnInit {
               console.log("Usuario no en BD")
               this.apiService.postUsuarioDB(this.perfilUsuario.username).subscribe(resp => {
                 console.log("Usuario agregado a la BD:", resp);
+                location.reload();
               })
             }
           });

@@ -15,6 +15,7 @@ export class PreferenciasComponent {
   public perfilUsuario: KeycloakProfile | null = null;
   public isLogueado = false;
   activities: { name: string, selected: boolean }[] = [];
+  estadoInicial: { name: string, selected: boolean }[] = [];
   public desactivarBotonGuardar: boolean = false;
 
   constructor(private readonly keycloak: KeycloakService, private apiService: ApiService) { }
@@ -35,8 +36,10 @@ export class PreferenciasComponent {
             } else {
               this.activities.push({ name: actividad.nombre, selected: false })
             }
-          })
+            
 
+          })    
+          this.estadoInicial = JSON.parse(JSON.stringify(this.activities));
         })
       });
     }
@@ -56,7 +59,7 @@ export class PreferenciasComponent {
   closeModal() {
     const modal: any = document.querySelector('.modal');
     modal.style.display = 'none';
-    this.refreshPage();
+    this.activities = JSON.parse(JSON.stringify(this.estadoInicial));
   }
 
   activitiesToDelete(activities: { name: string, selected: boolean }[], nombreUsuario: string): Observable<{ activitiesDelete: { name: string; selected: boolean; }[]; activitiesAdd: { name: string; selected: boolean; }[]; }> {
@@ -73,7 +76,6 @@ export class PreferenciasComponent {
           activitiesAdd.push(activitie);
         }
       });
-
       return { activitiesDelete, activitiesAdd };
     })
     );

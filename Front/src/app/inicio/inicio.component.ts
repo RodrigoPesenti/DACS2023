@@ -12,6 +12,7 @@ import { LocationService } from '../core/services/actFutura.service';
 export class InicioComponent implements OnInit {
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
 public climaActual : String = "";
+public textoDia : String = "";
 public climaImagenURL: String = "";
 public climaResponse : IClimaResponse  | null = null;
 
@@ -27,6 +28,17 @@ public climaResponse : IClimaResponse  | null = null;
     if (latitude) {
       console.log("Tiene coordenadas custom: ", latitude, longitude);
       const dia = <number>this.locationService.getDia()
+      if (dia == 0) {
+        this.textoDia = "actual"
+      }
+      else {
+        if (dia == 1){
+          this.textoDia = "a " + dia + " día"
+        }
+        else{
+          this.textoDia = "a " + dia + " días"
+        }   
+      }
       // Si hay latitud, se obtiene el clima usando las coordenadas actuales
       this.fetchWeatherForcast(latitude, longitude, dia);
     } else {
@@ -34,6 +46,8 @@ public climaResponse : IClimaResponse  | null = null;
       // Si no hay latitud, se obtienen primero las coordenadas y luego el clima
       await this.fetchLocationAndWeather();
     }
+
+    
   }
 
   private fetchWeatherForcast(latitude: number, longitude: number, dia: number): void {
@@ -85,9 +99,9 @@ public climaResponse : IClimaResponse  | null = null;
         3: "Cubierto",
         45: "Niebla",
         48: "Niebla espesa",
-        51: "Llovizna de ligera",
-        53: "Llovizna de moderada",
-        55: "Llovizna de densa",
+        51: "Llovizna ligera",
+        53: "Llovizna moderada",
+        55: "Llovizna densa",
         56: "Llovizna helada ligera",
         57: "Llovizna helada densa",
         61: "Lluvia leve",

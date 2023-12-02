@@ -21,7 +21,6 @@ export class ActividadesFuturasComponent implements OnInit {
 
   
   ngOnInit(): void {
-
     this.fechaActual = this.calendar.getToday();
   }
 

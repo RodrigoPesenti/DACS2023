@@ -22,7 +22,7 @@ public actividadesFactibles : IPreferencia[]  | null = null;
 public prefEmpty : boolean = false;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4";
-private ubicacion:string = "Concepción+del+Uruguay"
+private ubicacion:string = "AR, Entre Rios, Colón"
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
 private dia: number | null = null;
 
@@ -41,7 +41,11 @@ sonidoCard() {
        {nombre: 'Golf', imagen: 'https://media-public.canva.com/17QDU/MAEpaH17QDU/1/tl.png'},
        {nombre: 'Camping', imagen: 'https://media-public.canva.com/l3pQo/MAEZBml3pQo/1/tl.png'},
        {nombre: 'Futbol', imagen: 'https://media-public.canva.com/IpIqA/MAEiSZIpIqA/1/tl.png'},
-       {nombre: 'Actividades hogareñas', imagen: 'https://media-public.canva.com/ZnY-s/MAFfV3ZnY-s/1/tl.png'}
+       {nombre: 'Actividades hogareñas', imagen: 'https://media-public.canva.com/ZnY-s/MAFfV3ZnY-s/1/tl.png'},
+       {nombre: 'Teatro', imagen: 'https://media-public.canva.com/oLbHs/MAElceoLbHs/1/tl.png'},
+       {nombre: 'Biblioteca', imagen: 'https://media-public.canva.com/_9Lmc/MAE2sP_9Lmc/1/tl.png'},
+       {nombre: 'Cine', imagen: 'https://media-public.canva.com/Tgr2A/MAC7OWTgr2A/2/tl.png'},
+       {nombre: 'Café', imagen: 'https://media-public.canva.com/ltXGE/MAEhb_ltXGE/2/tl.png'}
      ];
 
   async ngOnInit() {
@@ -49,14 +53,15 @@ sonidoCard() {
       this.persistentCoordinates = {latitude: <number>this.locationService.getLatitude(), longitude: <number>this.locationService.getLongitude()}
       console.log("Lat: ", this.locationService.getLatitude(), "Long: ", this.locationService.getLongitude(), "Adress: ", this.locationService.getAdress())
       this.ubicacion = <string>this.locationService.getAdress()
-      this.InicializarMapaConUbicacion(this.ubicacion); 
+      this.inicializarMapaConUbicacion(this.ubicacion); 
       this.dia = this.locationService.getDia();
     }
     else { //Si no esta cargado el location service
       this.apiService.getLocation().then((coordinates) => {
         console.log(`Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}`);
         this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.longitude};
-        this.InicializarMapaConLatYLong(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude); //Lo inicializa en esa lat y long, pero despues busca por la predefinida nomas, arreglar
+        
+        this.inicializarMapaConLatYLong(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude); //Lo inicializa en esa lat y long, pero despues busca por la predefinida nomas, arreglar
         this.dia = 0;
       })
       .catch((error) => {
@@ -168,16 +173,16 @@ sonidoCard() {
       }
   }
 
-  InicializarMapaConUbicacion(nombreActividad:string): void {
+  inicializarMapaConUbicacion(nombreActividad:string): void {
     var iframe = document.getElementById('mapaGoogle');
-    let nuevaURL = this.urlBase + "&q=" + nombreActividad + "," + this.ubicacion;
+    let nuevaURL = this.urlBase + "&q=" + nombreActividad;
     if (iframe) {
       console.log(iframe.getAttribute('src'));
       iframe.setAttribute('src', nuevaURL);
     }
 }
 
-  InicializarMapaConLatYLong(lat: number, lon: number) {
+  inicializarMapaConLatYLong(lat: number, lon: number) {
     var iframe = document.getElementById('mapaGoogle');
     let nuevaURL = this.urlBase + "&q=" + lat + "," + lon;
     if (iframe) {
