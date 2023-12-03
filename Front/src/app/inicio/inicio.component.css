@@ -78,8 +78,8 @@
     top: 50%;
     left: 85%;
     transform: translate(-50%, -50%);
-    width: 70px;
-    height: 70px;
+    width: 5vw;
+    height: 5vw;
     background-image: url('../../assets/images/earth-americas-solid.svg'); /* Reemplaza 'ruta_de_tu_imagen.png' con la URL de tu imagen */
     background-size: cover; /* Ajusta el tamaño de la imagen */
     transition: all 0.5s;
