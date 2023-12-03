@@ -9,7 +9,7 @@
     </ng-container>
   </div>
  
-  <div class="gap-custom-parametros">
+  <div class="gap-custom-parametros" (mouseenter)="sonidoButton()">
     <button
       type="button"
       class="parametros-orange-button"
@@ -19,7 +19,7 @@
     </button>
   </div>
 
-  <div class="gap-custom-actividades">
+  <div class="gap-custom-actividades" (mouseenter)="sonidoButton()" (click)="sonidoWoosh()">
     <button
       type="button"
       class="actividades-orange-button"

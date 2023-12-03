@@ -16,6 +16,27 @@ public textoDia : String = "";
 public climaImagenURL: String = "";
 public climaResponse : IClimaResponse  | null = null;
 
+  sonidoButton() { 
+    var sonido = new Audio('../../assets/sounds/ButtonSound.wav');
+    sonido.volume = 0.5;
+    sonido.play();
+  }
+
+  sonidoWoosh() { 
+    const audioCtx = new AudioContext();
+    const audioElement = new Audio('../../assets/sounds/Woosh.wav');
+    const source = audioCtx.createMediaElementSource(audioElement);
+    const gainNode = audioCtx.createGain();
+
+    gainNode.gain.value = 0.5; // Ajustar volumen
+    source.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    audioElement.playbackRate = 5; // Ajustar velocidad
+
+    audioElement.play();
+  }
+
   constructor(private apiService: ApiService, private locationService: LocationService) {}
 
   public async ngOnInit() {

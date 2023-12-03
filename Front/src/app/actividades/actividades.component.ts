@@ -28,11 +28,11 @@ private dia: number | null = null;
 
 constructor(private readonly keycloak: KeycloakService,private apiService: ApiService, private locationService: LocationService) {}
 
-sonidoCard() { 
-        var sonido = new Audio('../../assets/sounds/CardSound.mp3');
-        sonido.volume = 0.5;
-        sonido.play();
-      }
+    sonidoCard() { 
+            var sonido = new Audio('../../assets/sounds/CardSound.mp3');
+            sonido.volume = 0.5;
+            sonido.play();
+          }
 
    actividades = [
        {nombre: 'Pesca', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
