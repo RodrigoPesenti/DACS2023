@@ -8,26 +8,25 @@
       <h1 class="text-white display-1">Clima {{textoDia}}: {{ climaActual }}</h1>
     </ng-container>
   </div>
-
-  <div class="gap-custom-ppal">
+ 
+  <div class="gap-custom-parametros">
     <button
       type="button"
-      class="large-orange-button"
+      class="parametros-orange-button"
+      (click)="toggleModal()"
+    >
+      Ubicacion
+    </button>
+  </div>
+
+  <div class="gap-custom-actividades">
+    <button
+      type="button"
+      class="actividades-orange-button"
       onclick="location.href='#actividades'"
     >
       Actividades para hoy
     </button>
   </div>
-  
-  <div class="gap-custom-futuro">
-    <button
-      type="button"
-      class="slim-orange-button"
-      (click)="toggleModal()"
-    >
-      Explora actividades futuras
-    </button>
-  </div>
-
 
 </div>
