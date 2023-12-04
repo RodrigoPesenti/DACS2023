@@ -31,3 +31,26 @@ h3{
     cursor: pointer;
     border-radius: 5px;
 }
+
+
+/* Para navegadores WebKit (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #eb9c09; /* Color del área desplazable de la barra de desplazamiento */
+    border-radius: 6px; /* Bordes redondeados de la barra de desplazamiento */
+  }
+  
+  /* Para navegadores no-WebKit (Firefox, Edge, etc.) */
+  /* Ten en cuenta que Firefox actualmente (a partir de mi conocimiento hasta enero de 2022) no soporta totalmente personalización de la barra de desplazamiento con CSS. */
+  scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+  }
+  
+  scrollbar-thumb {
+    background-color: #4CAF50; /* Color del área desplazable de la barra de desplazamiento */
+    border-radius: 6px; /* Bordes redondeados de la barra de desplazamiento */
+  }
+  
