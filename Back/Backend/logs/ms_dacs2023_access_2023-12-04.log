@@ -1,0 +1,2 @@
+[04/Dec/2023:13:50:46 -0300] 127.0.0.1 "GET /backend/actividad HTTP/1.1" 200 (5693 ms)
+[04/Dec/2023:13:50:47 -0300] 127.0.0.1 "GET /backend/actividad HTTP/1.1" 200 (201 ms)
