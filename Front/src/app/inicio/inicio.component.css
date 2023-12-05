@@ -1,7 +1,7 @@
 .actividades-orange-button {
     display: inline-block;
-    padding: 3vw 4vw; /* Change fixed px to vw for responsive padding */
-    font-size: 4vw; /* Change fixed px to vw for responsive font-size */
+    padding: 3vw 4vw;
+    font-size: 3vw; 
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -89,4 +89,8 @@
 
 .parametros-orange-button:hover::after {
     opacity: 1;
+}
+
+.display-1 {
+  font-size: 4vw;
 }
