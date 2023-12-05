@@ -20,9 +20,10 @@ public actividadesResponse: IPreferencia[] | null = null;
 public climaResponse: IClimaResponse | null = null;
 public actividadesFactibles : IPreferencia[]  | null = null;
 public prefEmpty : boolean = false;
+public sinFactibles : boolean = false;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4";
-private ubicacion:string = "AR, Entre Rios, Colón"
+private ubicacion:string = "Argentina, Entre Rios, Concepcion Del Uruguay"
 private persistentCoordinates: { latitude: number, longitude: number } | null = null;
 private dia: number | null = null;
 
@@ -35,17 +36,17 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
           }
 
    actividades = [
-       {nombre: 'Pesca', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
-       {nombre: 'Senderismo', imagen: 'https://media-public.canva.com/mQYyw/MAEWSDmQYyw/1/tl.png' }, 
-       {nombre: 'Correr', imagen: 'https://media-public.canva.com/nhCaI/MAEcNYnhCaI/1/tl.png' } ,
-       {nombre: 'Golf', imagen: 'https://media-public.canva.com/17QDU/MAEpaH17QDU/1/tl.png'},
-       {nombre: 'Camping', imagen: 'https://media-public.canva.com/l3pQo/MAEZBml3pQo/1/tl.png'},
-       {nombre: 'Futbol', imagen: 'https://media-public.canva.com/IpIqA/MAEiSZIpIqA/1/tl.png'},
-       {nombre: 'Actividades hogareñas', imagen: 'https://media-public.canva.com/ZnY-s/MAFfV3ZnY-s/1/tl.png'},
-       {nombre: 'Teatro', imagen: 'https://media-public.canva.com/oLbHs/MAElceoLbHs/1/tl.png'},
-       {nombre: 'Biblioteca', imagen: 'https://media-public.canva.com/_9Lmc/MAE2sP_9Lmc/1/tl.png'},
-       {nombre: 'Cine', imagen: 'https://media-public.canva.com/Tgr2A/MAC7OWTgr2A/2/tl.png'},
-       {nombre: 'Café', imagen: 'https://media-public.canva.com/ltXGE/MAEhb_ltXGE/2/tl.png'}
+       {nombre: 'Pesca', busqueda: 'Fishing area', imagen: 'https://media-public.canva.com/89OdA/MAD95E89OdA/1/tl.png' } ,
+       {nombre: 'Senderismo',busqueda: 'Senderismo', imagen: 'https://media-public.canva.com/mQYyw/MAEWSDmQYyw/1/tl.png' }, 
+       {nombre: 'Correr', busqueda: 'Area para correr', imagen: 'https://media-public.canva.com/nhCaI/MAEcNYnhCaI/1/tl.png' } ,
+       {nombre: 'Golf', busqueda: 'Golf ', imagen: 'https://media-public.canva.com/17QDU/MAEpaH17QDU/1/tl.png'},
+       {nombre: 'Camping', busqueda: 'Camping', imagen: 'https://media-public.canva.com/l3pQo/MAEZBml3pQo/1/tl.png'},
+       {nombre: 'Futbol', busqueda: 'Futsal', imagen: 'https://media-public.canva.com/IpIqA/MAEiSZIpIqA/1/tl.png'},
+       {nombre: 'Actividades hogareñas', busqueda: '', imagen: 'https://media-public.canva.com/ZnY-s/MAFfV3ZnY-s/1/tl.png'},
+       {nombre: 'Teatro', busqueda: 'Teatro', imagen: 'https://media-public.canva.com/oLbHs/MAElceoLbHs/1/tl.png'},
+       {nombre: 'Biblioteca', busqueda: 'Biblioteca', imagen: 'https://media-public.canva.com/_9Lmc/MAE2sP_9Lmc/1/tl.png'},
+       {nombre: 'Cine', busqueda: 'Cine', imagen: 'https://media-public.canva.com/Tgr2A/MAC7OWTgr2A/2/tl.png'},
+       {nombre: 'Café', busqueda: 'Café', imagen: 'https://media-public.canva.com/ltXGE/MAEhb_ltXGE/2/tl.png'}
      ];
 
   async ngOnInit() {
@@ -70,28 +71,37 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
       
     }
     
-
     this.isLogueado = await this.keycloak.isLoggedIn();
     if (this.isLogueado) {
       this.perfilUsuario = await this.keycloak.loadUserProfile();
       if (this.perfilUsuario && this.perfilUsuario.username) {
-        this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(preferencias => {;
+        this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(preferencias => {
           if (preferencias.length == 0) {
             this.prefEmpty = true;
-            this.apiService.getActividades().subscribe(preferencias => {
-              this.actividadesFactibles = this.analizarActividades(preferencias);
+            this.apiService.getActividades().subscribe(actividades => {
+              this.analizarActividades(actividades).subscribe(actFact => {this.actividadesFactibles = actFact});
             });
           }
           else{
-            this.actividadesFactibles = this.analizarActividades(preferencias);
-            console.log("Actividades factibles: ", this.actividadesFactibles);
+            this.analizarActividades(preferencias).subscribe(actFact => {this.actividadesFactibles = actFact
+              console.log("Actividades factibles: ", actFact);
+              console.log("Actividades factibles length: ", actFact.length);
+              if (this.actividadesFactibles.length == 0) {
+                this.sinFactibles = true;
+                this.apiService.getActividades().subscribe(actividades => {
+                  this.analizarActividades(actividades).subscribe(actFact => {this.actividadesFactibles = actFact});
+                  console.log("Predef: ",this.actividadesFactibles);
+                });   
+              }
+            });
+            
           }
         });
       }
     }
     else {
       this.apiService.getActividades().subscribe(preferencias => {
-        this.actividadesFactibles = this.analizarActividades(preferencias);
+        this.analizarActividades(preferencias).subscribe(actFact => {this.actividadesFactibles = actFact});
         console.log("Actividades factibles: ", this.actividadesFactibles)
       });
     }
@@ -104,6 +114,11 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
     return actividadEncontrada ? actividadEncontrada.imagen : ''; //Return ternario (Si encuentra una url devuelve lo de la izquirda de los 2 puntos, si no lo de la derecha)
   }
   
+  getBusquedaActividad(nombreActividad: string): string {
+    const actividadEncontrada = this.actividades.find(actividad => actividad.nombre === nombreActividad);
+    return actividadEncontrada ? actividadEncontrada.busqueda : ''; //Return ternario (Si encuentra una url devuelve lo de la izquirda de los 2 puntos, si no lo de la derecha)
+  }
+
   esFactible( valoresAceptables: IPreferencia): Observable<boolean> {
     if (this.persistentCoordinates) {
       return this.apiService.getClima(this.persistentCoordinates.latitude,this.persistentCoordinates.longitude).pipe(
@@ -147,21 +162,23 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
     
   }
 
-  analizarActividades(actividades: IPreferencia[]) {
-    const actividadesFactibles: IPreferencia[] = [];
-  
+  //Potencial para mostrar
+  analizarActividades(actividades: IPreferencia[]): Observable<IPreferencia[]> { 
     const observables = actividades.map(actividad => this.esFactible(actividad));
-  
-    forkJoin(observables).subscribe(resultados => {
-      resultados.forEach((resultado, index) => {
-        if (resultado) {
-          actividadesFactibles.push(actividades[index]);
-        }
-      });
-    });
-  
-    return actividadesFactibles;
+
+    return forkJoin(observables).pipe(
+      map(resultados => {
+        const actividadesFactibles: IPreferencia[] = [];
+        resultados.forEach((resultado, index) => {
+          if (resultado) {
+            actividadesFactibles.push(actividades[index]);
+          }
+        });
+        return actividadesFactibles;
+      })
+    );
   }
+
 
   buscarEnMapa(nombreActividad:string): void {
       var iframe = document.getElementById('mapaGoogle');

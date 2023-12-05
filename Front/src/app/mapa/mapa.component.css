@@ -7,3 +7,10 @@
     padding-top:18vh;
     padding-bottom: 15px;
 }
+
+#actColumna {
+    #prefEmpty, #sinFactibles{
+        color:white;
+        display:none
+    }
+}

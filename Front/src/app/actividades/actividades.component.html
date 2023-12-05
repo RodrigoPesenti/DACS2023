@@ -1,11 +1,16 @@
 <div class="d-flex flex-column">
-  <div class="d-flex text-center justify-content-center p-5" *ngIf = prefEmpty>
-    <h3 id="prefEmpty">No posees preferencias, para mas personalizacion carga las tuyas</h3>
+  <div class="d-flex flex-column text-center justify-content-center p-5" *ngIf = prefEmpty>
+    <h3 id="prefEmpty">No posees preferencias, las siguiente son actividades disponibles en base al clima.</h3>
+    <br>
+    <h3 id="prefEmpty">Para mas personalización selecciona las tuyas desde tu perfil.</h3>
+  </div>
+  <div class="d-flex text-center justify-content-center p-5" *ngIf = sinFactibles>
+    <h3 id="sinFactibles">No hay actividades que coincidan con sus preferencias, las siguietes son actividades disponibles en base al clima.</h3>
   </div>
   <div class="d-flex flex-wrap justify-content-center gap-3 pt-3" style="max-height: 600px; overflow-y: auto;">  
     <div
       class="d-flex flex-column col-sm-3 hover-div p-3 justify-content-center align-items-center text-center"
-      (click)="buscarEnMapa(actividad.nombre)"
+      (click)="buscarEnMapa(getBusquedaActividad(actividad.nombre))"
       href = '#mapa'
       (mouseenter)="sonidoCard()"
       *ngFor="let actividad of actividadesFactibles"
