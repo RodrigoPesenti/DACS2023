@@ -51,18 +51,17 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
 
   async ngOnInit() {
     if (this.locationService.getLatitude()){ //Si esta cargado el location service
+      //Obtenemos las coordenadas del servicio e inicializamos el mapa
       this.persistentCoordinates = {latitude: <number>this.locationService.getLatitude(), longitude: <number>this.locationService.getLongitude()}
-      console.log("Lat: ", this.locationService.getLatitude(), "Long: ", this.locationService.getLongitude(), "Adress: ", this.locationService.getAdress())
       this.ubicacion = <string>this.locationService.getAdress()
       this.inicializarMapaConUbicacion(this.ubicacion); 
       this.dia = this.locationService.getDia();
     }
     else { //Si no esta cargado el location service
+      //Obtenemos las coordenadas del navegador e inicializamos el mapa
       this.apiService.getLocation().then((coordinates) => {
-        console.log(`Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}`);
-        this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.longitude};
-        
-        this.inicializarMapaConLatYLong(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude); //Lo inicializa en esa lat y long, pero despues busca por la predefinida nomas, arreglar
+        this.persistentCoordinates = {latitude: coordinates.latitude, longitude: coordinates.longitude}; 
+        this.inicializarMapaConLatYLong(this.persistentCoordinates.latitude, this.persistentCoordinates.longitude);
         this.dia = 0;
       })
       .catch((error) => {
@@ -76,21 +75,18 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
       this.perfilUsuario = await this.keycloak.loadUserProfile();
       if (this.perfilUsuario && this.perfilUsuario.username) {
         this.apiService.getPreferenciasUsuario(this.perfilUsuario.username).subscribe(preferencias => {
-          if (preferencias.length == 0) {
+          if (preferencias.length == 0) {//Si no posee preferencias
             this.prefEmpty = true;
             this.apiService.getActividades().subscribe(actividades => {
               this.analizarActividades(actividades).subscribe(actFact => {this.actividadesFactibles = actFact});
             });
           }
-          else{
+          else{//Si posee preferencias
             this.analizarActividades(preferencias).subscribe(actFact => {this.actividadesFactibles = actFact
-              console.log("Actividades factibles: ", actFact);
-              console.log("Actividades factibles length: ", actFact.length);
-              if (this.actividadesFactibles.length == 0) {
+              if (this.actividadesFactibles.length == 0) {//Si posee preferencias pero ninguna es factible (Si existen factibles no se hace nada ya que esas seran las que se muestran)
                 this.sinFactibles = true;
                 this.apiService.getActividades().subscribe(actividades => {
                   this.analizarActividades(actividades).subscribe(actFact => {this.actividadesFactibles = actFact});
-                  console.log("Predef: ",this.actividadesFactibles);
                 });   
               }
             });
@@ -102,7 +98,6 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
     else {
       this.apiService.getActividades().subscribe(preferencias => {
         this.analizarActividades(preferencias).subscribe(actFact => {this.actividadesFactibles = actFact});
-        console.log("Actividades factibles: ", this.actividadesFactibles)
       });
     }
     
@@ -119,7 +114,12 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
     return actividadEncontrada ? actividadEncontrada.busqueda : ''; //Return ternario (Si encuentra una url devuelve lo de la izquirda de los 2 puntos, si no lo de la derecha)
   }
 
-  esFactible( valoresAceptables: IPreferencia): Observable<boolean> {
+  /**
+   * Verifica si los valores de clima son aceptables para una preferencia dada.
+   * @param {IPreferencia} preferencia - preferencia a determinar factibilidad.
+   * @returns {Observable<boolean>} - Observable que emite un valor booleano indicando si es factible o no.
+  */
+  esFactible( preferencia: IPreferencia): Observable<boolean> {
     if (this.persistentCoordinates) {
       return this.apiService.getClima(this.persistentCoordinates.latitude,this.persistentCoordinates.longitude).pipe(
         map((climaResponse) => {
@@ -142,12 +142,12 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
           // console.log('Viento Max Aceptable:', valoresAceptables.vientomax);
 
           if (      
-            climaResponse.daily.temperature_2m_min[<number>this.dia] >= valoresAceptables.tempmin &&
-            climaResponse.daily.temperature_2m_max[<number>this.dia] <= valoresAceptables.tempmax &&
-            climaResponse.daily.precipitation_probability_max[<number>this.dia] >= valoresAceptables.precipitacionmin &&
-            climaResponse.daily.precipitation_probability_max[<number>this.dia] <= valoresAceptables.precipitacionmax &&
-            climaResponse.daily.wind_speed_10m_max[<number>this.dia] >= valoresAceptables.vientomin &&
-            climaResponse.daily.wind_speed_10m_max[<number>this.dia] <= valoresAceptables.vientomax
+            climaResponse.daily.temperature_2m_min[<number>this.dia] >= preferencia.tempmin &&
+            climaResponse.daily.temperature_2m_max[<number>this.dia] <= preferencia.tempmax &&
+            climaResponse.daily.precipitation_probability_max[<number>this.dia] >= preferencia.precipitacionmin &&
+            climaResponse.daily.precipitation_probability_max[<number>this.dia] <= preferencia.precipitacionmax &&
+            climaResponse.daily.wind_speed_10m_max[<number>this.dia] >= preferencia.vientomin &&
+            climaResponse.daily.wind_speed_10m_max[<number>this.dia] <= preferencia.vientomax
           ) {
             return true;
           } else {
@@ -162,7 +162,11 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
     
   }
 
-  //Potencial para mostrar
+  /**
+   * Analiza un conjunto de actividades para verificar su factibilidad.
+   * @param {IPreferencia[]} actividades - Lista de actividades a analizar.
+   * @returns {Observable<IPreferencia[]>} - Observable que emite las actividades factibles.
+  */
   analizarActividades(actividades: IPreferencia[]): Observable<IPreferencia[]> { 
     const observables = actividades.map(actividad => this.esFactible(actividad));
 

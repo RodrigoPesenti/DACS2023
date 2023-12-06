@@ -28,7 +28,6 @@ export class PreferenciasComponent {
 
       this.apiService.getActividades().subscribe((listaActividades) => {
         this.apiService.getPreferenciasUsuario(nombreUsuario).subscribe((listaPreferencias) => {
-
           listaActividades.forEach((actividad) => {
             const matchingPreferencia = listaPreferencias.find(preferencia => preferencia.nombre === actividad.nombre);
             if (matchingPreferencia) {
@@ -36,8 +35,6 @@ export class PreferenciasComponent {
             } else {
               this.activities.push({ name: actividad.nombre, selected: false })
             }
-            
-
           })    
           this.estadoInicial = JSON.parse(JSON.stringify(this.activities));
         })
