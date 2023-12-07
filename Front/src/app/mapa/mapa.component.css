@@ -9,7 +9,7 @@
 }
 
 #actColumna {
-    #prefEmpty, #sinFactibles{
+    #prefEmpty, #sinFactibles, #noLogeado{
         color:white;
         display:none
     }

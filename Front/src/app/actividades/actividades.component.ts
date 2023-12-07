@@ -21,6 +21,7 @@ public climaResponse: IClimaResponse | null = null;
 public actividadesFactibles : IPreferencia[]  | null = null;
 public prefEmpty : boolean = false;
 public sinFactibles : boolean = false;
+public noLogeado : boolean = false;
 //URL acepta Nombre, dirección, código plus o ID de lugar "q=City+Hall,New+York,NY"
 private urlBase:string = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBUcr2sITl93oV9QiSycwPieaIGduvrat4";
 private ubicacion:string = "Argentina, Entre Rios, Concepcion Del Uruguay"
@@ -96,6 +97,7 @@ constructor(private readonly keycloak: KeycloakService,private apiService: ApiSe
       }
     }
     else {
+      this.noLogeado = true;
       this.apiService.getActividades().subscribe(preferencias => {
         this.analizarActividades(preferencias).subscribe(actFact => {this.actividadesFactibles = actFact});
       });
